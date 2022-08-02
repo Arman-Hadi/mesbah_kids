@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views import View
 
 from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
@@ -7,7 +8,7 @@ from .serializers import KidSerializer
 from core.models import Kid
 
 
-class KidsView(generics.ListCreateAPIView):
+class KidsView(generics.ListAPIView):
     serializer_class = KidSerializer
     authentication_classes = (SessionAuthentication,)
 
@@ -20,3 +21,9 @@ class KidsView(generics.ListCreateAPIView):
         if status: qs = qs.filter(status=status)
 
         return qs
+
+
+class FatherRequestView(View):
+    def get(self, request):
+        context = {'parent': 'پدر',}
+        return render(request, 'api/form.html', context=context)
