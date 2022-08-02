@@ -37,10 +37,11 @@
     </style>
   </head>
   <body>
-    <div class="form-container">
+    <form class="form-container" method="post">{% csrf_token %}
       <h2 class="mb-3 w-100 h2">اطلاعات کودک را وارد کنید:</h2>
       <div class="form-floating mb-3">
         <input
+          name="name"
           type="text"
           class="form-control"
           id="floatingInput"
@@ -50,7 +51,7 @@
       </div>
       <div class="form-floating mb-3">
         <input
-          type="number"
+          name="number"
           class="form-control"
           id="floatingPassword"
           placeholder="شماره"
@@ -58,9 +59,14 @@
         <label for="floatingPassword">شماره</label>
       </div>
       <div class="form-floating  mb-3">
-        <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+        <select class="form-select" name="gender" id="floatingSelect" aria-label="Floating label select example">
+          {% if parent == 'پدر' %}
           <option value="1">پسر</option>
           <option value="2">دختر</option>
+          {% else %}
+          <option value="2">دختر</option>
+          <option value="1">پسر</option>
+          {% endif %}
         </select>
         <label for="floatingSelect">جنسیت</label>
       </div>
@@ -69,6 +75,6 @@
       <div class="d-grid gap-2">
         <button class="w-100 btn btn-lg btn-dark" type="submit">ثبت درخواست</button>
       </div>
-    </div>
+    </form>
   </body>
 </html>
