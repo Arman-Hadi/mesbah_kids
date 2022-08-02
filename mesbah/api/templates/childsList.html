@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+      crossorigin="anonymous"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        direction: rtl;
+      }
+
+      .child-list-container {
+        padding: 1rem;
+      }
+      .card {
+        text-align: center;
+      }
+      .card-header {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar bg-light">
+      <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">درخواست تحویل</span>
+      </div>
+    </nav>
+    <div class="child-list-container" id="deliver-requests"></div>
+
+    <nav class="navbar bg-light">
+      <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">تحویل داده شده</span>
+      </div>
+    </nav>
+
+    <div class="child-list-container" id="delivered"></div>
+    <template id="card-template">
+      <div class="card mb-3">
+        <div class="card-header"></div>
+        <div class="card-body">
+          <h1 class="card-title"></h1>
+          <p class="card-text"></p>
+        </div>
+      </div>
+    </template>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const card = document
+      .getElementById("card-template")
+      .content.querySelector(".card");
+    const deliverRequestsContainer =
+      document.getElementById("deliver-requests");
+    const deliveredContainer = document.getElementById("delivered");
+    let deliverRequests = [];
+    UpdatingUI();
+    setInterval(UpdatingUI, 1000);
+    function UpdatingUI() {
+      axios.get("https://pazel.pythonanywhere.com/api/kids").then((res) => {
+        const results = [...res.data];
+        if (JSON.stringify(deliverRequests) !== JSON.stringify(results)) {
+          deliverRequests = results;
+          console.log("update", deliverRequests);
+          deliverRequestsContainer.innerHTML = "";
+          deliveredContainer.innerHTML = "";
+          deliverRequests.forEach((req) => {
+            const PersonalCard = card.cloneNode(true);
+            PersonalCard.querySelector(".card-header").textContent =
+              req.parent === "MO" ? "مادر" : "پدر";
+            PersonalCard.querySelector(".card-title").textContent = req.number;
+            PersonalCard.querySelector(".card-text").textContent = req.name;
+            if (req.status === "RE") {
+              req.parent === "MO"
+                ? PersonalCard.classList.add("text-bg-danger")
+                : PersonalCard.classList.add("text-bg-primary");
+              deliverRequestsContainer.appendChild(PersonalCard);
+            }
+            else {
+                PersonalCard.classList.add("text-bg-success")
+                deliveredContainer.appendChild(PersonalCard);
+            }
+          });
+        }
+      });
+    }
+  </script>
+</html>

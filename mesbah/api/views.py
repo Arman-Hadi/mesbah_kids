@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 
 from .serializers import KidSerializer
@@ -23,6 +26,26 @@ class KidsView(generics.ListAPIView):
         return qs
 
 
+class ChangeStatusView(APIView):
+    authentication_classes = (SessionAuthentication,)
+
+    def post(self, request):
+        try:
+            name = request.data.get('name', '')
+            number = request.data.get('number', 0)
+            user = request.user
+
+            kids = Kid.objects.filter(name=name, nummber=number)
+            for kid in kids:
+                kid.status = 'DE'
+                if user: kid.user = user
+                kid.save()
+
+            return Response(data={'success': True,}, status=200)
+        except Exception as e:
+            return Response(data={'success': False, 'error': str(e)}, status=400)
+
+
 class FatherRequestView(View):
     def get(self, request):
         context = {'parent': 'پدر',}
@@ -32,7 +55,7 @@ class FatherRequestView(View):
         name = request.POST.get('name', '')
         number = int(request.POST.get('number', 0))
         gender = 'MA' if request.POST.get('gender', '') == 'پسر' else 'FE'
-        kid = Kid.objects.create(name=name, number=number, gender=gender, parent='FA')
+        kid = Kid.objects.create(name=name, number=number, gender=gender, parent='FA', status='RE')
 
         return redirect('api:father')
 
@@ -46,6 +69,6 @@ class MotherRequestView(View):
         name = request.POST.get('name', '')
         number = int(request.POST.get('number', 0))
         gender = 'MA' if request.POST.get('gender', '') == 'پسر' else 'FE'
-        kid = Kid.objects.create(name=name, number=number, gender=gender, parent='MO')
+        kid = Kid.objects.create(name=name, number=number, gender=gender, parent='MO', status='RE')
 
         return redirect('api:mother')

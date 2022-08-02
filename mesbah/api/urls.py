@@ -9,4 +9,5 @@ urlpatterns = [
     path('kids', views.KidsView.as_view(), name='kids'),
     path('father', views.FatherRequestView.as_view(), name='father'),
     path('mother', views.MotherRequestView.as_view(), name='mother'),
+    path('deliver', views.ChangeStatusView.as_view(), name='deliver'),
 ]
