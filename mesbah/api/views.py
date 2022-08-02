@@ -27,18 +27,14 @@ class KidsView(generics.ListAPIView):
 
 
 class ChangeStatusView(APIView):
-    authentication_classes = (SessionAuthentication,)
-
     def post(self, request):
         try:
             name = request.data.get('name', '')
             number = request.data.get('number', 0)
-            user = request.user
 
             kids = Kid.objects.filter(name=name, number=number)
             for kid in kids:
                 kid.status = 'DE'
-                if user: kid.user = user
                 kid.save()
 
             return Response(data={'success': True,}, status=200)
