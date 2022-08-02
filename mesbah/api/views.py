@@ -35,7 +35,7 @@ class ChangeStatusView(APIView):
             number = request.data.get('number', 0)
             user = request.user
 
-            kids = Kid.objects.filter(name=name, nummber=number)
+            kids = Kid.objects.filter(name=name, number=number)
             for kid in kids:
                 kid.status = 'DE'
                 if user: kid.user = user
