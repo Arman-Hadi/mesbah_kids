@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>پسران</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -58,6 +58,40 @@
         </div>
       </div>
     </template>
+    <div
+      class="modal fade"
+      id="myModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">آیا این کودک را تحویل دادید؟</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              خیر دستم خورد!
+            </button>
+            <button type="button" class="btn  btn-success">بله تحویل دادم</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
@@ -71,7 +105,7 @@
     UpdatingUI();
     setInterval(UpdatingUI, 1000);
     function UpdatingUI() {
-      axios.get("https://pazel.pythonanywhere.com/api/kids").then((res) => {
+      axios.get("https://pazel.pythonanywhere.com/api/kids?gender=MA").then((res) => {
         const results = [...res.data];
         if (JSON.stringify(deliverRequests) !== JSON.stringify(results)) {
           deliverRequests = results;
@@ -88,11 +122,26 @@
               req.parent === "MO"
                 ? PersonalCard.classList.add("text-bg-danger")
                 : PersonalCard.classList.add("text-bg-primary");
+              PersonalCard.addEventListener("click", () => {
+                const modalDOM = document.getElementById('myModal')
+                const myModal = new bootstrap.Modal(modalDOM,{})
+                myModal.show();
+                modalDOM.querySelector('.modal-body').textContent = req.name;
+                const successBtnEventListener = modalDOM.querySelector('.btn-success').addEventListener('click' , ()=>{
+                    axios.post('https://pazel.pythonanywhere.com/api/deliver' , {name : req.name , number : req.number} ).then(()=>{
+                        myModal.hide();
+                        console.log('Delivered!' , req)
+                    })
+                   
+                })
+                const newModal = modalDOM.cloneNode(true)
+                modalDOM.remove();
+                document.body.appendChild(newModal);
+              });
               deliverRequestsContainer.appendChild(PersonalCard);
-            }
-            else {
-                PersonalCard.classList.add("text-bg-success")
-                deliveredContainer.appendChild(PersonalCard);
+            } else {
+              PersonalCard.classList.add("text-bg-success");
+              deliveredContainer.appendChild(PersonalCard);
             }
           });
         }

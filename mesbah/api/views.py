@@ -42,6 +42,16 @@ class ChangeStatusView(APIView):
             return Response(data={'success': False, 'error': str(e)}, status=400)
 
 
+class BoysView(View):
+    def get(self, request):
+        return render(request, 'api/boys.html')
+
+
+class GirlsView(View):
+    def get(self, request):
+        return render(request, 'api/girls.html')
+
+
 class FatherRequestView(View):
     def get(self, request):
         context = {'parent': 'پدر',}
