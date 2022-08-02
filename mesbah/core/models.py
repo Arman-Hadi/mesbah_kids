@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 
 
 class Kid(models.Model):
+    class Meta:
+        ordering = ['number', 'name',]
     number = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=255, blank=True, null=True)
 
@@ -25,4 +27,4 @@ class Kid(models.Model):
     ]
     parent = models.CharField(max_length=2, choices=PARENTs)
 
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)

@@ -1,3 +1,11 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Kid
+
+
+@admin.register(Kid)
+class KidAdmin(admin.ModelAdmin):
+    ordering = ['number',]
+    list_display = ['number', 'name', 'parent',]
+    list_filter = ['parent', 'gender',]
+    search_fields = ['number', 'name',]
