@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Kid(models.Model):
     class Meta:
-        ordering = ['-number', 'name',]
+        ordering = ['id', '-number', 'name',]
     number = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=255, blank=True, null=True)
 
