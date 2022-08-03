@@ -60,7 +60,7 @@ class FatherRequestView(View):
     def post(self, request):
         name = request.POST.get('name', '')
         number = int(request.POST.get('number', 0))
-        gender = 'MA' if request.POST.get('gender', '') == 'پسر' else 'FE'
+        gender = 'MA' if request.POST.get('gender', '') == '1' else 'FE'
         kid = Kid.objects.create(name=name, number=number, gender=gender, parent='FA', status='RE')
 
         return redirect('api:father')
@@ -74,7 +74,7 @@ class MotherRequestView(View):
     def post(self, request):
         name = request.POST.get('name', '')
         number = int(request.POST.get('number', 0))
-        gender = 'MA' if request.POST.get('gender', '') == 'پسر' else 'FE'
+        gender = 'MA' if request.POST.get('gender', '') == '1' else 'FE'
         kid = Kid.objects.create(name=name, number=number, gender=gender, parent='MO', status='RE')
 
         return redirect('api:mother')

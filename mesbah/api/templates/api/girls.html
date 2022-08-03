@@ -68,7 +68,9 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">آیا این کودک را تحویل دادید؟</h5>
+            <h5 class="modal-title" id="exampleModalLabel">
+              آیا این کودک را تحویل دادید؟
+            </h5>
             <button
               type="button"
               class="btn-close"
@@ -76,9 +78,7 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">
-
-          </div>
+          <div class="modal-body"></div>
           <div class="modal-footer">
             <button
               type="button"
@@ -87,7 +87,9 @@
             >
               خیر دستم خورد!
             </button>
-            <button type="button" class="btn  btn-success">بله تحویل دادم</button>
+            <button type="button" class="btn btn-success">
+              بله تحویل دادم
+            </button>
           </div>
         </div>
       </div>
@@ -122,21 +124,30 @@
               req.parent === "MO"
                 ? PersonalCard.classList.add("text-bg-danger")
                 : PersonalCard.classList.add("text-bg-primary");
+              const modalDOM = document.getElementById("myModal");
               PersonalCard.addEventListener("click", () => {
-                const modalDOM = document.getElementById('myModal')
-                const myModal = new bootstrap.Modal(modalDOM,{})
-                myModal.show();
-                modalDOM.querySelector('.modal-body').textContent = req.name;
-                const successBtnEventListener = modalDOM.querySelector('.btn-success').addEventListener('click' , ()=>{
-                    axios.post('https://pazel.pythonanywhere.com/api/deliver' , {name : req.name , number : req.number} ).then(()=>{
-                        myModal.hide();
-                        console.log('Delivered!' , req)
-                    })
-                   
-                })
-                const newModal = modalDOM.cloneNode(true)
-                modalDOM.remove();
+                const newModal = modalDOM.cloneNode(true);
                 document.body.appendChild(newModal);
+                newModal.addEventListener('hidden.bs.modal',()=>{
+                    newModal.remove();
+                })
+                const myModal = new bootstrap.Modal(newModal, {});
+                myModal.show();
+                newModal.querySelector(".modal-body").textContent = req.name;
+                const successBtnEventListener = newModal
+                  .querySelector(".btn-success")
+                  .addEventListener("click", () => {
+                    axios
+                      .post("https://pazel.pythonanywhere.com/api/deliver", {
+                        name: req.name,
+                        number: req.number,
+                      })
+                      .then(() => {
+                        myModal.hide();
+                        console.log("Delivered!", req);
+                      });
+                  });
+                
               });
               deliverRequestsContainer.appendChild(PersonalCard);
             } else {
