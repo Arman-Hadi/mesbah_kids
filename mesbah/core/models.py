@@ -1,30 +1,44 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from datetime import date
+
 
 class Kid(models.Model):
-    class Meta:
-        ordering = ['id', '-number', 'name',]
-    number = models.IntegerField(null=True, blank=True)
-    name = models.CharField(max_length=255, blank=True, null=True)
-
     GENDERs = [
         ('MA', 'پسر'),
         ('FE', 'دختر'),
+        ('NO', 'معلوم نیست'),
     ]
-    gender = models.CharField(max_length=2, choices=GENDERs)
-
     STATUSs = [
+        ('NO', 'نیامده'),
+        ('IN', 'داخل غرفه'),
         ('RE', 'درخواست تحویل'),
         ('SE', 'فرستاده شده'),
         ('DE', 'تحویل داده شده'),
     ]
-    status = models.CharField(max_length=2, choices=STATUSs)
-
-    PARENTs = [
-        ('MO', 'مادر'),
-        ('FA', 'پدر'),
+    GATEs = [
+        ('MA', 'آقایان'),
+        ('FE', 'خانمها'),
+        ('NO', 'معلوم نیست'),
     ]
-    parent = models.CharField(max_length=2, choices=PARENTs)
 
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    class Meta:
+        ordering = ['status', 'gender', 'gate_in', 'gate_out',
+            'first_name', 'last_name', '-number',]
+
+    first_name = models.CharField(max_length=100, blank=True, default='ندارد')
+    last_name = models.CharField(max_length=100, blank=True, default='ندارد')
+    birth_date = models.DateField(default=date(1396, 1, 1), blank=True)
+    gender = models.CharField(max_length=2, choices=GENDERs, blank=True, default='NO')
+
+    caretaker = models.CharField(max_length=100, blank=True, default='ندارد')
+    caretaker_name = models.CharField(max_length=100, blank=True, default='ندارد')
+    caretaker_phone_number = models.CharField(max_length=15, blank=True, default='000000000000')
+    emergancy_calls = models.CharField(max_length=255, blank=True, default='ندارد')
+
+    gate_in = models.CharField(max_length=2, choices=GATEs, blank=True, default='NO')
+    gate_out = models.CharField(max_length=2, choices=GATEs, blank=True, default='NO')
+
+    number = models.CharField(max_length=5, blank=True, default='000')
+    status = models.CharField(max_length=2, choices=STATUSs, blank=True, default='NO')
