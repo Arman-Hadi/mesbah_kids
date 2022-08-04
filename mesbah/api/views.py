@@ -80,3 +80,16 @@ class MotherRequestView(View):
         kid = Kid.objects.create(name=name, number=number, gender=gender, parent='MO', status='RE')
 
         return redirect('api:mother')
+
+
+class ResetView(View):
+    def get(self, request):
+        return render(request, 'api/reset.html')
+
+    def post(self, request):
+        password = request.POST.get('pass', '')
+        if password == 'sagggggg':
+            Kid.objects.all().update(gender='NO', gate_in='NO', gate_out='NO', number='000', status='NO')
+            return redirect('https://google.com')
+        else:
+            return redirect('api:reset')
