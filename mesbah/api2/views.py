@@ -85,7 +85,7 @@ class FatherDeliveryView(APIView):
             if not id:
                 return Response(data={'success': False, 'error': 'no id'}, status=400)
 
-            Kid.objects.filter(id=id).update(status='DE', gate_out='MA')
+            Kid.objects.filter(id=id).update(status='RE', gate_out='MA')
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:
@@ -102,7 +102,7 @@ class MohterDeliveryView(APIView):
             if not id:
                 return Response(data={'success': False, 'error': 'no id'}, status=400)
 
-            Kid.objects.filter(id=id).update(status='DE', gate_out='FE')
+            Kid.objects.filter(id=id).update(status='RE', gate_out='FE')
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:

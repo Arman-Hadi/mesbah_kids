@@ -18,10 +18,12 @@ class KidsView(generics.ListAPIView):
     def get_queryset(self):
         gender = self.request.GET.get('gender', None)
         status = self.request.GET.get('status', None)
+        exclude = self.request.GET.get('exclude', None)
 
         qs = Kid.objects.all()
         if gender: qs = qs.filter(gender=gender)
         if status: qs = qs.filter(status=status)
+        if exclude: qs = qs.exclude(status=exclude)
 
         return qs
 
@@ -44,14 +46,43 @@ class ChangeStatusView(APIView):
             return Response(data={'success': False, 'error': str(e)}, status=400)
 
 
+class NewKidView(View):
+    def get(self, request):
+        return render(request, 'api/new_kid.html')
+
+    def post(self, request):
+        data = dict()
+        for p, pp in request.POST.items():
+            if pp and p != 'csrfmiddlewaretoken':
+                data[p] = pp
+        kid = Kid.objects.create(**data)
+        if 'wc' in data:
+            kid.wc = True
+        else:
+            kid.wc = False
+        kid.status = 'IN'
+        kid.save()
+        return redirect('api:newkid')
+
+
 class BoysView(View):
     def get(self, request):
-        return render(request, 'api/boys.html')
+        site = request.get_host()
+        if 'localhost' in site:
+            site = f'http://{site}'
+        else:
+            site = f'https://{site}'
+        return render(request, 'api/boys.html', context={'site': site})
 
 
 class GirlsView(View):
     def get(self, request):
-        return render(request, 'api/girls.html')
+        site = request.get_host()
+        if 'localhost' in site:
+            site = f'http://{site}'
+        else:
+            site = f'https://{site}'
+        return render(request, 'api/girls.html', context={'site': site})
 
 
 class FatherRequestView(View):
