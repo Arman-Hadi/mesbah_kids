@@ -13,7 +13,7 @@ from core.models import Kid
 
 class KidsView(generics.ListAPIView):
     serializer_class = KidSerializer
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = ()
 
     def get_queryset(self):
         gender = self.request.GET.get('gender', None)
@@ -27,6 +27,8 @@ class KidsView(generics.ListAPIView):
 
 
 class ChangeStatusView(APIView):
+    authentication_classes = ()
+
     def post(self, request):
         try:
             name = request.data.get('name', '')
