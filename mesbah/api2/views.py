@@ -30,9 +30,27 @@ class ChangeStatusView(APIView):
             status = request.data.get('status', None)
 
             if not id or not status:
-                return Response(data={'success': False, 'error': str(e)}, status=400)
+                return Response(data={'success': False, 'error': 'no id or status'}, status=400)
 
             Kid.objects.filter(id=id).update(status=status)
+
+            return Response(data={'success': True,}, status=200)
+        except Exception as e:
+            return Response(data={'success': False, 'error': str(e)}, status=400)
+
+
+class BoysEntryView(APIView):
+    authentication_classes = ()
+
+    def post(self, request):
+        try:
+            id = int(request.data.get('id', None))
+            number = request.data.get('number', None)
+
+            if not id or not number:
+                return Response(data={'success': False, 'error': 'no id or number'}, status=400)
+
+            Kid.objects.filter(id=id).update(number=number, gender='MA', status='IN')
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:

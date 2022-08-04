@@ -24,7 +24,7 @@ class Kid(models.Model):
     ]
 
     class Meta:
-        ordering = ['-status', 'gender', 'gate_in', 'gate_out',
+        ordering = ['status', 'gender', 'gate_in', 'gate_out',
             'first_name', 'last_name', '-number',]
 
     first_name = models.CharField(max_length=100, blank=True, default='ندارد')
