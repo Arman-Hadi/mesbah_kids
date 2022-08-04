@@ -11,11 +11,11 @@ class Kid(models.Model):
         ('NO', 'معلوم نیست'),
     ]
     STATUSs = [
-        ('NO', 'نیامده'),
-        ('IN', 'داخل غرفه'),
         ('RE', 'درخواست تحویل'),
-        ('SE', 'فرستاده شده'),
         ('DE', 'تحویل داده شده'),
+        ('SE', 'فرستاده شده'),
+        ('IN', 'داخل غرفه'),
+        ('NO', 'نیامده'),
     ]
     GATEs = [
         ('MA', 'آقایان'),
@@ -24,7 +24,7 @@ class Kid(models.Model):
     ]
 
     class Meta:
-        ordering = ['status', 'gender', 'gate_in', 'gate_out',
+        ordering = ['-status', 'gender', 'gate_in', 'gate_out',
             'first_name', 'last_name', '-number',]
 
     first_name = models.CharField(max_length=100, blank=True, default='ندارد')

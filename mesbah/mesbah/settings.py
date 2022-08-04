@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'core',
     'api',
+    'api2',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
