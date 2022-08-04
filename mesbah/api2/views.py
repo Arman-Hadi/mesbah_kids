@@ -73,3 +73,37 @@ class GirlsEntryView(APIView):
             return Response(data={'success': True,}, status=200)
         except Exception as e:
             return Response(data={'success': False, 'error': str(e)}, status=400)
+
+
+class FatherDeliveryView(APIView):
+    authentication_classes = ()
+
+    def post(self, request):
+        try:
+            id = int(request.data.get('id', None))
+
+            if not id:
+                return Response(data={'success': False, 'error': 'no id'}, status=400)
+
+            Kid.objects.filter(id=id).update(status='DE', gate_out='MA')
+
+            return Response(data={'success': True,}, status=200)
+        except Exception as e:
+            return Response(data={'success': False, 'error': str(e)}, status=400)
+
+
+class MohterDeliveryView(APIView):
+    authentication_classes = ()
+
+    def post(self, request):
+        try:
+            id = int(request.data.get('id', None))
+
+            if not id:
+                return Response(data={'success': False, 'error': 'no id'}, status=400)
+
+            Kid.objects.filter(id=id).update(status='DE', gate_out='FE')
+
+            return Response(data={'success': True,}, status=200)
+        except Exception as e:
+            return Response(data={'success': False, 'error': str(e)}, status=400)
