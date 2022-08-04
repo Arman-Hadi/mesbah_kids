@@ -29,13 +29,15 @@ class Kid(models.Model):
 
     first_name = models.CharField(max_length=100, blank=True, default='ندارد')
     last_name = models.CharField(max_length=100, blank=True, default='ندارد')
-    birth_date = models.DateField(default=date(1396, 1, 1), blank=True)
+    birth_date = models.CharField(max_length=12, default='1396/01/01', blank=True)
     gender = models.CharField(max_length=2, choices=GENDERs, blank=True, default='NO')
+    wc = models.BooleanField(default=True, blank=True)
 
     caretaker = models.CharField(max_length=100, blank=True, default='ندارد')
     caretaker_name = models.CharField(max_length=100, blank=True, default='ندارد')
-    caretaker_phone_number = models.CharField(max_length=15, blank=True, default='000000000000')
+    caretaker_phone_number = models.CharField(max_length=15, blank=True, default='ندارد')
     emergancy_calls = models.CharField(max_length=255, blank=True, default='ندارد')
+    caretaker_home_number = models.CharField(max_length=15, blank=True, default='ندارد')
 
     gate_in = models.CharField(max_length=2, choices=GATEs, blank=True, default='NO')
     gate_out = models.CharField(max_length=2, choices=GATEs, blank=True, default='NO')
