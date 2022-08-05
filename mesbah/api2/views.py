@@ -48,11 +48,12 @@ class BoysEntryView(APIView):
         try:
             id = int(request.data.get('id', None))
             number = request.data.get('number', None)
+            gender = request.data.get('gender', 'NO')
 
             if not id or not number:
                 return Response(data={'success': False, 'error': 'no id or number'}, status=400)
 
-            Kid.objects.filter(id=id).update(number=number, gender='MA', status='IN', last_change=timezone.now())
+            Kid.objects.filter(id=id).update(number=number, gender=gender, status='IN', last_change=timezone.now())
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:
@@ -66,11 +67,12 @@ class GirlsEntryView(APIView):
         try:
             id = int(request.data.get('id', None))
             number = request.data.get('number', None)
+            gender = request.data.get('gender', 'NO')
 
             if not id or not number:
                 return Response(data={'success': False, 'error': 'no id or number'}, status=400)
 
-            Kid.objects.filter(id=id).update(number=number, gender='FE', status='IN', last_change=timezone.now())
+            Kid.objects.filter(id=id).update(number=number, gender=gender, status='IN', last_change=timezone.now())
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:

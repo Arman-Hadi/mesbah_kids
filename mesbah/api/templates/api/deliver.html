@@ -7,9 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% if gender == 'MA' %}
-      <title>فرستادن پسران</title>
+      <title>تحویل پسران</title>
     {% elif gender == 'FE' %}
-      <title>فرستادن دختران</title>
+      <title>تحویل دختران</title>
     {% endif %}
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
@@ -43,10 +43,10 @@
   <body class="p-4 container-sm">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="req-tab" data-bs-toggle="tab" data-bs-target="#req" type="button" role="tab" aria-controls="req" aria-selected="true">درخواست تحویل</button>
+        <button class="nav-link active" id="req-tab" data-bs-toggle="tab" data-bs-target="#req" type="button" role="tab" aria-controls="req" aria-selected="true">فرستاده شده</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="del-tab" data-bs-toggle="tab" data-bs-target="#del" type="button" role="tab" aria-controls="del" aria-selected="false">فرستاده شده</button>
+        <button class="nav-link" id="del-tab" data-bs-toggle="tab" data-bs-target="#del" type="button" role="tab" aria-controls="del" aria-selected="false">تحویل شده</button>
       </li>
     </ul>
     <div class="tab-content" id="myTabContent">
@@ -78,7 +78,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">
-              آیا این کودک را فرستادید؟
+              آیا این کودک را تحویل دادید؟
             </h5>
             <button
               type="button"
@@ -97,7 +97,7 @@
               خیر دستم خورد!
             </button>
             <button type="button" class="btn btn-success">
-              بله فرستادم
+              بله تحویل دادم
             </button>
           </div>
         </div>
@@ -118,7 +118,7 @@
     UpdatingUI();
     setInterval(UpdatingUI, 1000);
     function UpdatingUI() {
-      axios.get(api + "/api/kids?gender=" + gender + "&exclude=IN&exclude=NO").then((res) => {
+      axios.get(api + "/api/kids?gender=" + gender + "&exclude=IN&exclude=NO&exclude=RE").then((res) => {
         const results = [...res.data];
         if (JSON.stringify(deliverRequests) !== JSON.stringify(results)) {
           deliverRequests = results;
@@ -131,7 +131,7 @@
               req.gate_out === "FE" ? "مادر" : "پدر";
             PersonalCard.querySelector(".card-title").textContent = req.number;
             PersonalCard.querySelector(".card-text").textContent = req.first_name + ' ' + req.last_name;
-            if (req.status === "RE") {
+            if (req.status === "SE") {
               req.gate_out === "FE"
                 ? PersonalCard.classList.add("text-bg-success")
                 : PersonalCard.classList.add("text-bg-primary");
@@ -151,11 +151,11 @@
                     axios
                       .post(api + "/api2/status", {
                         id: req.id,
-                        status: 'SE',
+                        status: 'DE',
                       })
                       .then(() => {
                         myModal.hide();
-                        console.log("Sent!", req);
+                        console.log("Delivered!", req);
                       });
                   });
                 

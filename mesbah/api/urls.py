@@ -10,6 +10,7 @@ urlpatterns = [
     path('father', views.FatherRequestView.as_view(), name='father'),
     path('mother', views.MotherRequestView.as_view(), name='mother'),
     path('send/<slug:gender>', views.SendKidView.as_view(), name='send'),
+    path('deliver/<slug:gender>', views.DeliverKidView.as_view(), name='deliver'),
     path('newkid', views.NewKidView.as_view(), name='newkid'),
 
     path('reset', views.ResetView.as_view(), name='reset'),

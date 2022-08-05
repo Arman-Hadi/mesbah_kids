@@ -62,6 +62,19 @@ class SendKidView(View):
         return render(request, 'api/send.html', context={'site': site, 'gender': gender})
 
 
+class DeliverKidView(View):
+    def get(self, request, gender):
+        if not (gender == 'MA' or gender == 'FE'):
+            return HttpResponseNotFound()
+        site = request.get_host()
+        if 'localhost' in site:
+            site = f'http://{site}'
+        else:
+            site = f'https://{site}'
+
+        return render(request, 'api/deliver.html', context={'site': site, 'gender': gender})
+
+
 class FatherRequestView(View):
     def get(self, request):
         context = {'parent': 'پدر',}
