@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
+from django.http.response import HttpResponseNotFound
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -18,12 +18,14 @@ class KidsView(generics.ListAPIView):
     def get_queryset(self):
         gender = self.request.GET.get('gender', None)
         status = self.request.GET.get('status', None)
-        exclude = self.request.GET.get('exclude', None)
+        exclude = self.request.GET.getlist('exclude', None)
 
         qs = Kid.objects.all()
         if gender: qs = qs.filter(gender=gender)
         if status: qs = qs.filter(status=status)
-        if exclude: qs = qs.exclude(status=exclude)
+        if exclude:
+            for i in exclude:
+                qs = qs.exclude(status=i)
 
         return qs
 
@@ -65,24 +67,17 @@ class NewKidView(View):
         return redirect('api:newkid')
 
 
-class BoysView(View):
-    def get(self, request):
+class SendKidView(View):
+    def get(self, request, gender):
+        if not (gender == 'MA' or gender == 'FE'):
+            return HttpResponseNotFound()
         site = request.get_host()
         if 'localhost' in site:
             site = f'http://{site}'
         else:
             site = f'https://{site}'
-        return render(request, 'api/boys.html', context={'site': site})
 
-
-class GirlsView(View):
-    def get(self, request):
-        site = request.get_host()
-        if 'localhost' in site:
-            site = f'http://{site}'
-        else:
-            site = f'https://{site}'
-        return render(request, 'api/girls.html', context={'site': site})
+        return render(request, 'api/send.html', context={'site': site, 'gender': gender})
 
 
 class FatherRequestView(View):

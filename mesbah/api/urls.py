@@ -10,8 +10,7 @@ urlpatterns = [
     path('father', views.FatherRequestView.as_view(), name='father'),
     path('mother', views.MotherRequestView.as_view(), name='mother'),
     path('deliver', views.ChangeStatusView.as_view(), name='deliver'),
-    path('boys', views.BoysView.as_view(), name='boys'),
-    path('girls', views.GirlsView.as_view(), name='girls'),
+    path('send/<slug:gender>', views.SendKidView.as_view(), name='send'),
     path('newkid', views.NewKidView.as_view(), name='newkid'),
 
     path('reset', views.ResetView.as_view(), name='reset'),

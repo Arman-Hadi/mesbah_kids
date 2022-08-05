@@ -44,3 +44,6 @@ class Kid(models.Model):
 
     number = models.CharField(max_length=5, blank=True, default='000')
     status = models.CharField(max_length=2, choices=STATUSs, blank=True, default='NO')
+
+    def __str__(self):
+        return f'{self.number}. {self.first_name} {self.last_name}'

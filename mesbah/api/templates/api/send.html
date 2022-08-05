@@ -6,7 +6,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>پسران</title>
+    {% if gender == 'MA' %}
+      <title>فرستادن پسران</title>
+    {% elif gender == 'FE' %}
+      <title>فرستادن دختران</title>
+    {% endif %}
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -36,21 +40,24 @@
       }
     </style>
   </head>
-  <body>
-    <nav class="navbar bg-light">
-      <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">درخواست تحویل</span>
+  <body class="p-4">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="req-tab" data-bs-toggle="tab" data-bs-target="#req" type="button" role="tab" aria-controls="req" aria-selected="true">درخواست تحویل</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="del-tab" data-bs-toggle="tab" data-bs-target="#del" type="button" role="tab" aria-controls="del" aria-selected="false">فرستاده شده</button>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="req" role="tabpanel" aria-labelledby="req-tab">
+        <div class="child-list-container" id="deliver-requests"></div>
       </div>
-    </nav>
-    <div class="child-list-container" id="deliver-requests"></div>
-
-    <nav class="navbar bg-light">
-      <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">تحویل داده شده</span>
+      <div class="tab-pane fade" id="del" role="tabpanel" aria-labelledby="del-tab">
+        <div class="child-list-container" id="delivered"></div>
       </div>
-    </nav>
+    </div>
 
-    <div class="child-list-container" id="delivered"></div>
     <template id="card-template">
       <div class="card mb-3">
         <div class="card-header"></div>
@@ -100,6 +107,7 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     api = '{{ site }}'
+    gender = '{{ gender }}'
     const card = document
       .getElementById("card-template")
       .content.querySelector(".card");
@@ -110,7 +118,7 @@
     UpdatingUI();
     setInterval(UpdatingUI, 1000);
     function UpdatingUI() {
-      axios.get(api + "/api/kids?gender=MA").then((res) => {
+      axios.get(api + "/api/kids?gender=" + gender + "&exclude=IN&exclude=NO").then((res) => {
         const results = [...res.data];
         if (JSON.stringify(deliverRequests) !== JSON.stringify(results)) {
           deliverRequests = results;
@@ -143,18 +151,22 @@
                     axios
                       .post(api + "/api2/status", {
                         id: req.id,
-                        status: 'DE',
+                        status: 'SE',
                       })
                       .then(() => {
                         myModal.hide();
-                        console.log("Delivered!", req);
+                        console.log("Sent!", req);
                       });
                   });
                 
               });
               deliverRequestsContainer.appendChild(PersonalCard);
             } else {
-              PersonalCard.classList.add("text-bg-success");
+              if (req.gate_out == 'FE'){
+                PersonalCard.classList.add("text-bg-success");
+              } else {
+                PersonalCard.classList.add("text-bg-secondary");
+              }
               deliveredContainer.appendChild(PersonalCard);
             }
           });
