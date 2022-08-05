@@ -30,24 +30,6 @@ class KidsView(generics.ListAPIView):
         return qs
 
 
-class ChangeStatusView(APIView):
-    authentication_classes = ()
-
-    def post(self, request):
-        try:
-            name = request.data.get('name', '')
-            number = request.data.get('number', 0)
-
-            kids = Kid.objects.filter(name=name, number=number)
-            for kid in kids:
-                kid.status = 'DE'
-                kid.save()
-
-            return Response(data={'success': True,}, status=200)
-        except Exception as e:
-            return Response(data={'success': False, 'error': str(e)}, status=400)
-
-
 class NewKidView(View):
     def get(self, request):
         return render(request, 'api/new_kid.html')
@@ -115,7 +97,7 @@ class ResetView(View):
     def post(self, request):
         password = request.POST.get('pass', '')
         if password == 'sagggggg':
-            Kid.objects.all().update(gender='NO', gate_in='NO', gate_out='NO', number='000', status='NO')
+            Kid.objects.all().update(gender='NO', gate_in='NO', gate_out='NO', number='000', status='NO', last_change=None)
             return redirect('https://google.com')
         else:
             return redirect('api:reset')

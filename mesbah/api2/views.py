@@ -2,6 +2,8 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from django.utils import timezone
+
 from .serializers import KidSerializer
 from core.models import Kid
 
@@ -32,7 +34,7 @@ class ChangeStatusView(APIView):
             if not id or not status:
                 return Response(data={'success': False, 'error': 'no id or status'}, status=400)
 
-            Kid.objects.filter(id=id).update(status=status)
+            Kid.objects.filter(id=id).update(status=status, last_change=timezone.now())
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:
@@ -50,7 +52,7 @@ class BoysEntryView(APIView):
             if not id or not number:
                 return Response(data={'success': False, 'error': 'no id or number'}, status=400)
 
-            Kid.objects.filter(id=id).update(number=number, gender='MA', status='IN')
+            Kid.objects.filter(id=id).update(number=number, gender='MA', status='IN', last_change=timezone.now())
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:
@@ -68,7 +70,7 @@ class GirlsEntryView(APIView):
             if not id or not number:
                 return Response(data={'success': False, 'error': 'no id or number'}, status=400)
 
-            Kid.objects.filter(id=id).update(number=number, gender='FE', status='IN')
+            Kid.objects.filter(id=id).update(number=number, gender='FE', status='IN', last_change=timezone.now())
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:
@@ -85,7 +87,7 @@ class FatherDeliveryView(APIView):
             if not id:
                 return Response(data={'success': False, 'error': 'no id'}, status=400)
 
-            Kid.objects.filter(id=id).update(status='RE', gate_out='MA')
+            Kid.objects.filter(id=id).update(status='RE', gate_out='MA', last_change=timezone.now())
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:
@@ -102,7 +104,7 @@ class MohterDeliveryView(APIView):
             if not id:
                 return Response(data={'success': False, 'error': 'no id'}, status=400)
 
-            Kid.objects.filter(id=id).update(status='RE', gate_out='FE')
+            Kid.objects.filter(id=id).update(status='RE', gate_out='FE', last_change=timezone.now())
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:

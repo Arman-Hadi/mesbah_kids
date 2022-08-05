@@ -24,7 +24,7 @@ class Kid(models.Model):
     ]
 
     class Meta:
-        ordering = ['status', 'gender', 'gate_in', 'gate_out',
+        ordering = ['-last_change', 'status', 'gender', 'gate_in', 'gate_out',
             'first_name', 'last_name', '-number',]
 
     first_name = models.CharField(max_length=100, blank=True, default='ندارد')
@@ -44,6 +44,8 @@ class Kid(models.Model):
 
     number = models.CharField(max_length=5, blank=True, default='000')
     status = models.CharField(max_length=2, choices=STATUSs, blank=True, default='NO')
+
+    last_change = models.DateTimeField(null=True, default=None, blank=True)
 
     def __str__(self):
         return f'{self.number}. {self.first_name} {self.last_name}'
