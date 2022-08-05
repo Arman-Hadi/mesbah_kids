@@ -50,8 +50,10 @@ class BoysEntryView(APIView):
             number = request.data.get('number', None)
             gender = request.data.get('gender', 'NO')
 
-            if not id or not number:
+            if not id or number == '000' or not number:
                 return Response(data={'success': False, 'error': 'no id or number'}, status=400)
+            if not(gender == 'FE' or gender == 'MA'):
+                return Response(data={'success': False, 'error': 'no gender'}, status=400)
 
             Kid.objects.filter(id=id).update(number=number, gender=gender, status='IN', last_change=timezone.now())
 
@@ -69,8 +71,10 @@ class GirlsEntryView(APIView):
             number = request.data.get('number', None)
             gender = request.data.get('gender', 'NO')
 
-            if not id or not number:
+            if not id or number == '000' or not number:
                 return Response(data={'success': False, 'error': 'no id or number'}, status=400)
+            if not(gender == 'FE' or gender == 'MA'):
+                return Response(data={'success': False, 'error': 'no gender'}, status=400)
 
             Kid.objects.filter(id=id).update(number=number, gender=gender, status='IN', last_change=timezone.now())
 
@@ -117,4 +121,5 @@ class PorslineWebhook(APIView):
     authentication_classes = ()
 
     def post(self, request):
-        pass
+        data = request.data
+        return Response(data)
