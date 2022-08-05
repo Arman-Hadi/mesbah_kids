@@ -161,12 +161,16 @@
                 
               });
               deliverRequestsContainer.appendChild(PersonalCard);
-            } else {
+            } else if (req.status == 'SE') {
               if (req.gate_out == 'FE'){
                 PersonalCard.classList.add("text-bg-warning");
               } else {
                 PersonalCard.classList.add("text-bg-info");
               }
+              deliveredContainer.appendChild(PersonalCard);
+            }
+            else {
+              PersonalCard.classList.add("text-bg-secondary");
               deliveredContainer.appendChild(PersonalCard);
             }
           });

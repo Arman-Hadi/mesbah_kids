@@ -14,4 +14,5 @@ urlpatterns = [
 
     path('father-delivery', views.FatherDeliveryView.as_view(), name='father-delivery'),
     path('mother-delivery', views.MohterDeliveryView.as_view(), name='mother-delivery'),
+
 ]

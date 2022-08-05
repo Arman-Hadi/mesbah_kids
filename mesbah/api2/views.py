@@ -111,3 +111,10 @@ class MohterDeliveryView(APIView):
             return Response(data={'success': True,}, status=200)
         except Exception as e:
             return Response(data={'success': False, 'error': str(e)}, status=400)
+
+
+class PorslineWebhook(APIView):
+    authentication_classes = ()
+
+    def post(self, request):
+        pass

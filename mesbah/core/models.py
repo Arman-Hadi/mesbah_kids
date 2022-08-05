@@ -35,9 +35,9 @@ class Kid(models.Model):
 
     caretaker = models.CharField(max_length=100, blank=True, default='ندارد')
     caretaker_name = models.CharField(max_length=100, blank=True, default='ندارد')
-    caretaker_phone_number = models.CharField(max_length=15, blank=True, default='ندارد')
-    emergancy_calls = models.CharField(max_length=255, blank=True, default='ندارد')
-    caretaker_home_number = models.CharField(max_length=15, blank=True, default='ندارد')
+    caretaker_phone_number = models.CharField(max_length=100, blank=True, default='ندارد')
+    emergancy_calls = models.CharField(max_length=100, blank=True, default='ندارد')
+    caretaker_home_number = models.CharField(max_length=100, blank=True, default='ندارد')
 
     gate_in = models.CharField(max_length=2, choices=GATEs, blank=True, default='NO')
     gate_out = models.CharField(max_length=2, choices=GATEs, blank=True, default='NO')
