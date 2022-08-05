@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.http.response import HttpResponseNotFound
+from django.conf import settings
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -57,11 +58,14 @@ class SendKidView(View):
     def get(self, request, gender):
         if not (gender == 'MA' or gender == 'FE'):
             return HttpResponseNotFound()
-        site = request.get_host()
-        if 'localhost' in site:
-            site = f'http://{site}'
+        if not settings.API:
+            site = request.get_host()
+            if 'localhost' in site:
+                site = f'http://{site}'
+            else:
+                site = f'https://{site}'
         else:
-            site = f'https://{site}'
+            site = settings.API
 
         return render(request, 'api/send.html', context={'site': site, 'gender': gender})
 
@@ -70,11 +74,14 @@ class DeliverKidView(View):
     def get(self, request, gender):
         if not (gender == 'MA' or gender == 'FE'):
             return HttpResponseNotFound()
-        site = request.get_host()
-        if 'localhost' in site:
-            site = f'http://{site}'
+        if not settings.API:
+            site = request.get_host()
+            if 'localhost' in site:
+                site = f'http://{site}'
+            else:
+                site = f'https://{site}'
         else:
-            site = f'https://{site}'
+            site = settings.API
 
         return render(request, 'api/deliver.html', context={'site': site, 'gender': gender})
 
