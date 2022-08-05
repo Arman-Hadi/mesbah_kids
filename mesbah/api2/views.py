@@ -156,6 +156,6 @@ class GetPorslineData(APIView):
                     }
                     Kid.objects.create(**prop)
 
-            return Response(data)
+            return Response({'success': True,})
         else:
             return Response({'error': response.text,}, status=response.status_code)
