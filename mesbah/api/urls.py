@@ -14,4 +14,6 @@ urlpatterns = [
     path('newkid', views.NewKidView.as_view(), name='newkid'),
 
     path('reset', views.ResetView.as_view(), name='reset'),
+
+    path('', views.home, name='home'),
 ]

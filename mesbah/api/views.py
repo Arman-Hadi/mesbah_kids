@@ -11,6 +11,10 @@ from .serializers import KidSerializer
 from core.models import Kid
 
 
+def home(request):
+    return render(request, 'api/index.html')
+
+
 class KidsView(generics.ListAPIView):
     serializer_class = KidSerializer
     authentication_classes = ()
