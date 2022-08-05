@@ -7,6 +7,9 @@ from django.utils import timezone
 from .serializers import KidSerializer
 from core.models import Kid
 
+from datetime import date, datetime, timedelta
+import requests
+
 
 class KidsView(generics.ListCreateAPIView):
     serializer_class = KidSerializer
@@ -117,9 +120,42 @@ class MohterDeliveryView(APIView):
             return Response(data={'success': False, 'error': str(e)}, status=400)
 
 
-class PorslineWebhook(APIView):
+class GetPorslineData(APIView):
     authentication_classes = ()
 
-    def post(self, request):
-        data = request.data
-        return Response(data)
+    def get(self, request):
+        url = 'https://survey.porsline.ir/api/surveys/524056/responses/'
+        # yesterday = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
+        today = str(date.today())
+        payload = {
+            "from_date": today,
+            # "to_date": "2022-01-02",
+        }
+        headers = {
+            'Authorization': 'API-Key 36bfd2b3b1b7b1b4dcf1da7ae833a896450a07a0',
+        }
+        response = requests.request("POST", url, headers=headers, data=payload)
+
+        if response.status_code == 200:
+            data = response.json()['body']
+
+            for i in data:
+                porsline_id = i['data'][0]
+                if Kid.objects.filter(porsline_id=porsline_id).count() == 0:    
+                    prop = {
+                        'porsline_id': porsline_id,
+                        'first_name': i['data'][1],
+                        'last_name': i['data'][2],
+                        'birth_date': i['data'][3],
+                        'caretaker': i['data'][4],
+                        'caretaker_name': i['data'][5],
+                        'caretaker_phone_number': i['data'][6],
+                        'emergancy_calls': i['data'][7],
+                        'wc': i['data'][8] != 'خیر',
+                        'caretaker_home_number': i['data'][9],
+                    }
+                    Kid.objects.create(**prop)
+
+            return Response(data)
+        else:
+            return Response({'error': response.text,}, status=response.status_code)

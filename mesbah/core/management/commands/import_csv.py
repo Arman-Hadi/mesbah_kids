@@ -6,10 +6,13 @@ import pandas
 
 
 def dataframe_to_database(df : pandas.DataFrame, set_id=True):
+    cols = df.columns.to_list()
+    df.drop_duplicates(subset=[cols[1], cols[2], cols[3], cols[4], cols[5],], inplace=True)
     if set_id:
         for c, i in df.iterrows():
             kid = Kid()
             kid.id = c
+            kid.porsline_id = i[0]
             kid.first_name = i[1]
             kid.last_name = i[2]
             kid.birth_date = i[3]
@@ -23,6 +26,7 @@ def dataframe_to_database(df : pandas.DataFrame, set_id=True):
     else:
         for c, i in df.iterrows():
             kid = Kid()
+            kid.porsline_id = i[0]
             kid.first_name = i[1]
             kid.last_name = i[2]
             kid.birth_date = i[3]

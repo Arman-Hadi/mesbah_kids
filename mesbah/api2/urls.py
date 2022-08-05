@@ -15,5 +15,5 @@ urlpatterns = [
     path('father-delivery', views.FatherDeliveryView.as_view(), name='father-delivery'),
     path('mother-delivery', views.MohterDeliveryView.as_view(), name='mother-delivery'),
 
-    path('porsline_webhook', views.PorslineWebhook.as_view(), name='porsline'),
+    path('porsline', views.GetPorslineData.as_view(), name='porsline'),
 ]

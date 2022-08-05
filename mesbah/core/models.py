@@ -27,6 +27,8 @@ class Kid(models.Model):
         ordering = ['-last_change', 'status', 'gender', 'gate_in', 'gate_out',
             'first_name', 'last_name', '-number',]
 
+    porsline_id = models.CharField(max_length=50, blank=True, default='----')
+
     first_name = models.CharField(max_length=100, blank=True, default='ندارد')
     last_name = models.CharField(max_length=100, blank=True, default='ندارد')
     birth_date = models.CharField(max_length=12, default='1396/01/01', blank=True)
