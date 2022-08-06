@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'api/IRANSans/css/style.css' %}">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% if gender == 'MA' %}
+      <title>نظامت پسران</title>
+    {% elif gender == 'FE' %}
+      <title>نظامت دختران</title>
+    {% endif %}
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+      crossorigin="anonymous"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        direction: rtl;
+      }
+
+      .child-list-container {
+        padding: 1rem;
+      }
+      .card {
+        text-align: center;
+      }
+      .card-header {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body class="p-4 container-sm">
+    <div class="d-flex mb-2 px-3">
+      <a class="flex-sm-fill fs-6 pt-1" style="max-width: 3rem;" href="https://mesbahchildrenroom.web.app/">خانه</a>
+      {% if gender == 'MA' %}
+        <h3 class="text-center flex-fill">نظامت پسران</h3>
+      {% elif gender == 'FE' %}
+        <h3 class="text-center flex-fill">نظامت دختران</h3>
+      {% endif %}
+    </div>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="req-tab" data-bs-toggle="tab" data-bs-target="#req" type="button" role="tab" aria-controls="req" aria-selected="true">درخواست تحویل</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="send-tab" data-bs-toggle="tab" data-bs-target="#send" type="button" role="tab" aria-controls="send" aria-selected="false">فرستاده شده</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="del-tab" data-bs-toggle="tab" data-bs-target="#del" type="button" role="tab" aria-controls="del" aria-selected="false">تحویل داده شده</button>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="req" role="tabpanel" aria-labelledby="req-tab">
+        <div class="child-list-container" id="deliver-requests"></div>
+      </div>
+      <div class="tab-pane fade" id="send" role="tabpanel" aria-labelledby="send-tab">
+        <div class="child-list-container" id="sent"></div>
+      </div>
+      <div class="tab-pane fade" id="del" role="tabpanel" aria-labelledby="del-tab">
+        <div class="child-list-container" id="delivered"></div>
+      </div>
+    </div>
+
+    <template id="card-template">
+      <div class="card mb-3">
+        <div class="card-header"></div>
+        <div class="card-body">
+          <h1 class="card-title"></h1>
+          <p class="card-text"></p>
+        </div>
+      </div>
+    </template>
+
+    <div
+      class="modal fade"
+      id="myModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              آیا این کودک را فرستادید؟
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              خیر دستم خورد!
+            </button>
+            <button type="button" class="btn btn-success">
+              بله فرستادم
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="myModal2"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              آیا این کودک را تحویل دادید؟
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              خیر دستم خورد!
+            </button>
+            <button type="button" class="btn btn-success">
+              بله تحویل دادم
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    api = '{{ site }}'
+    gender = '{{ gender }}'
+  
+    const card = document
+      .getElementById("card-template")
+      .content.querySelector(".card");
+
+    const deliverRequestsContainer = document.getElementById("deliver-requests");
+    const sentContainer = document.getElementById("sent");
+    const deliveredContainer = document.getElementById("delivered");
+    let deliverRequests = [];
+
+    UpdatingUI();
+    setInterval(UpdatingUI, 1000);
+    function UpdatingUI() {
+      axios.get(api + "/api/kids?gender=" + gender + "&exclude=IN&exclude=NO").then((res) => {
+        const results = [...res.data];
+        if (JSON.stringify(deliverRequests) !== JSON.stringify(results)) {
+          deliverRequests = results;
+          console.log("update", deliverRequests);
+
+          deliverRequestsContainer.innerHTML = "";
+          sentContainer.innerHTML = "";
+          deliveredContainer.innerHTML = "";
+
+          deliverRequests.forEach((req) => {
+            const PersonalCard = card.cloneNode(true);
+            PersonalCard.querySelector(".card-header").textContent = req.gate_out === "FE" ? "مادر" : "پدر";
+            PersonalCard.querySelector(".card-title").textContent = req.number;
+            PersonalCard.querySelector(".card-text").textContent = req.first_name + ' ' + req.last_name;
+
+            if (req.status === "RE") {
+              req.gate_out === "FE"
+                ? PersonalCard.classList.add("text-bg-success")
+                : PersonalCard.classList.add("text-bg-primary");
+
+              const modalDOM = document.getElementById("myModal");
+              PersonalCard.addEventListener("click", () => {
+                const newModal = modalDOM.cloneNode(true);
+                document.body.appendChild(newModal);
+                newModal.addEventListener('hidden.bs.modal',()=>{
+                    newModal.remove();
+                })
+                const myModal = new bootstrap.Modal(newModal, {});
+                myModal.show();
+                newModal.querySelector(".modal-body").textContent = req.first_name + ' ' + req.last_name;
+                const successBtnEventListener = newModal
+                  .querySelector(".btn-success")
+                  .addEventListener("click", () => {
+                    axios
+                      .post(api + "/api2/status", {
+                        id: req.id,
+                        status: 'SE',
+                      })
+                      .then(() => {
+                        myModal.hide();
+                        console.log("Sent!", req);
+                      });
+                  });
+              });
+
+              deliverRequestsContainer.appendChild(PersonalCard);
+            } else if (req.status == 'SE') {
+              req.gate_out === "FE"
+                ? PersonalCard.classList.add("text-bg-warning")
+                : PersonalCard.classList.add("text-bg-info");
+
+              const modalDOM2 = document.getElementById("myModal2");
+              PersonalCard.addEventListener("click", () => {
+                const newModal2 = modalDOM2.cloneNode(true);
+                document.body.appendChild(newModal2);
+                newModal2.addEventListener('hidden.bs.modal',()=>{
+                    newModal2.remove();
+                })
+                const myModal = new bootstrap.Modal(newModal2, {});
+                myModal.show();
+                newModal2.querySelector(".modal-body").textContent = req.first_name + ' ' + req.last_name;
+                const successBtnEventListener = newModal2
+                  .querySelector(".btn-success")
+                  .addEventListener("click", () => {
+                    axios
+                      .post(api + "/api2/status", {
+                        id: req.id,
+                        status: 'DE',
+                      })
+                      .then(() => {
+                        myModal.hide();
+                        console.log("Delivered!", req);
+                      });
+                  });
+              });
+
+              sentContainer.appendChild(PersonalCard);
+            } else if (req.status == 'DE') {
+              req.gate_out === "FE"
+                ? PersonalCard.classList.add("text-bg-dark")
+                : PersonalCard.classList.add("text-bg-secondary");
+              deliveredContainer.appendChild(PersonalCard);
+            }
+          });
+        }
+      });
+    }
+  </script>
+</html>

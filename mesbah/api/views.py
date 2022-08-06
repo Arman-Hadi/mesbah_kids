@@ -54,6 +54,22 @@ class NewKidView(View):
         return redirect('api:newkid')
 
 
+class NezamatView(View):
+    def get(self, request, gender):
+        if not (gender == 'MA' or gender == 'FE'):
+            return HttpResponseNotFound()
+        if not settings.API:
+            site = request.get_host()
+            if 'localhost' in site:
+                site = f'http://{site}'
+            else:
+                site = f'https://{site}'
+        else:
+            site = settings.API
+
+        return render(request, 'api/nezamat.html', context={'site': site, 'gender': gender})
+
+
 class SendKidView(View):
     def get(self, request, gender):
         if not (gender == 'MA' or gender == 'FE'):

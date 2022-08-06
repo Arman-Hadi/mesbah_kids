@@ -54,7 +54,7 @@ class KidsEntryView(APIView):
             gate_in = 'FE'
         else:
             return Response(data={'error': 'endpoint not found'}, status=404)
-     
+
         try:
             id = int(request.data.get('id', None))
             number = request.data.get('number', None)
