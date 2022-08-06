@@ -22,6 +22,7 @@ class KidsView(generics.ListCreateAPIView):
         qs = Kid.objects.all()
         if gender: qs = qs.filter(gender=gender)
         if status: qs = qs.filter(status=status)
+        qs.order_by('-last_change')
 
         return qs
 
