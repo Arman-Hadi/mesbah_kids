@@ -24,7 +24,7 @@ class Kid(models.Model):
     ]
 
     class Meta:
-        ordering = ['-last_change', 'status', 'gender', 'gate_in', 'gate_out',
+        ordering = ['last_change', 'status', 'gender', 'gate_in', 'gate_out',
             'first_name', 'last_name', '-number',]
 
     porsline_id = models.CharField(max_length=50, blank=True, default='----')
