@@ -116,12 +116,22 @@ class MotherRequestView(View):
 
 class ResetView(View):
     def get(self, request):
-        return render(request, 'api/reset.html')
+        resets = {
+            'gender': 'جنسیت',
+            'number': 'شماره',
+        }
+        return render(request, 'api/reset.html', context={'resets': resets,})
 
     def post(self, request):
+        gender = 'NO' if request.POST.get('gender', None) else None
+        number = '000' if request.POST.get('number', None) else None
         password = request.POST.get('pass', '')
         if password == 'sagggggg':
-            Kid.objects.all().update(gender='NO', gate_in='NO', gate_out='NO', number='000', status='NO', last_change=None)
+            data = dict.fromkeys(['gate_in', 'gate_out', 'status',], 'NO')
+            if gender: data['gender'] = gender
+            if number: data['number'] = number
+            data['last_change'] = None
+            Kid.objects.all().update(**data)
             return redirect('https://google.com')
         else:
             return redirect('api:reset')

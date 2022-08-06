@@ -44,10 +44,17 @@ class ChangeStatusView(APIView):
             return Response(data={'success': False, 'error': str(e)}, status=400)
 
 
-class BoysEntryView(APIView):
+class KidsEntryView(APIView):
     authentication_classes = ()
 
-    def post(self, request):
+    def post(self, request, kids):
+        if kids == 'boys':
+            gate_in = 'MA'
+        elif kids == 'girls':
+            gate_in = 'FE'
+        else:
+            return Response(data={'error': 'endpoint not found'}, status=404)
+     
         try:
             id = int(request.data.get('id', None))
             number = request.data.get('number', None)
@@ -58,62 +65,31 @@ class BoysEntryView(APIView):
             if not(gender == 'FE' or gender == 'MA'):
                 return Response(data={'success': False, 'error': 'no gender'}, status=400)
 
-            Kid.objects.filter(id=id).update(number=number, gender=gender, status='IN', last_change=timezone.now())
+            Kid.objects.filter(id=id).update(gate_in=gate_in, number=number, gender=gender, status='IN', last_change=timezone.now())
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:
             return Response(data={'success': False, 'error': str(e)}, status=400)
 
 
-class GirlsEntryView(APIView):
+class ParentDeliveryView(APIView):
     authentication_classes = ()
 
-    def post(self, request):
-        try:
-            id = int(request.data.get('id', None))
-            number = request.data.get('number', None)
-            gender = request.data.get('gender', 'NO')
+    def post(self, request, parent):
+        if parent == 'father':
+            gate_out = 'MA'
+        elif parent == 'mother':
+            gate_out = 'FE'
+        else:
+            return Response(data={'error': 'endpoint not found'}, status=404)
 
-            if not id or number == '000' or not number:
-                return Response(data={'success': False, 'error': 'no id or number'}, status=400)
-            if not(gender == 'FE' or gender == 'MA'):
-                return Response(data={'success': False, 'error': 'no gender'}, status=400)
-
-            Kid.objects.filter(id=id).update(number=number, gender=gender, status='IN', last_change=timezone.now())
-
-            return Response(data={'success': True,}, status=200)
-        except Exception as e:
-            return Response(data={'success': False, 'error': str(e)}, status=400)
-
-
-class FatherDeliveryView(APIView):
-    authentication_classes = ()
-
-    def post(self, request):
         try:
             id = int(request.data.get('id', None))
 
             if not id:
                 return Response(data={'success': False, 'error': 'no id'}, status=400)
 
-            Kid.objects.filter(id=id).update(status='RE', gate_out='MA', last_change=timezone.now())
-
-            return Response(data={'success': True,}, status=200)
-        except Exception as e:
-            return Response(data={'success': False, 'error': str(e)}, status=400)
-
-
-class MohterDeliveryView(APIView):
-    authentication_classes = ()
-
-    def post(self, request):
-        try:
-            id = int(request.data.get('id', None))
-
-            if not id:
-                return Response(data={'success': False, 'error': 'no id'}, status=400)
-
-            Kid.objects.filter(id=id).update(status='RE', gate_out='FE', last_change=timezone.now())
+            Kid.objects.filter(id=id).update(status='RE', gate_out=gate_out, last_change=timezone.now())
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:
@@ -159,3 +135,29 @@ class GetPorslineData(APIView):
             return Response({'success': True,})
         else:
             return Response({'error': response.text,}, status=response.status_code)
+
+
+class UndoStatusView(APIView):
+    def post(self, request):
+        id = int(request.data.get('id', None))
+        status = request.data.get('status', None)
+
+        if not id or not status:
+            return Response(data={'success': False, 'error': 'no id or no status'}, status=400)
+        data = {
+            'status': status,
+        }
+        if status == 'NO':
+            data['last_change'] = None
+            data['gate_in'] = 'NO'
+            data['gate_out'] = 'NO'
+            data['number'] = '000'
+            data['gender'] = 'NO'
+        elif status == 'IN':
+            data['gate_out'] = 'NO'
+
+        try:
+            Kid.objects.filter(id=id).update(**data)
+            return Response(data={'success': True,}, status=200)
+        except Exception as e:
+            return Response(data={'success': False, 'error': str(e)}, status=400)

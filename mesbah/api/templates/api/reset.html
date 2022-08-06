@@ -40,8 +40,20 @@
   </head>
   <body>
     <form class="form-container" method="post">{% csrf_token %}
-        <input type="password" name="pass" required>
-        <button type="submit" >ریست کن!</button>
+      <div class="d-sm-flex flex-column my-3 p-3 border">
+        <h5>چه چیزهایی ریست شود؟</h5>
+        {% for k, v in resets.items %}
+        <div class="m-2">
+          <input class="form-check-input" type="checkbox" name="{{ k }}" value="1">
+          <label class="form-check-label" for="flexCheckDefault">
+            {{ v }}
+          </label>
+        </div>
+        {% endfor %}
+      </div>
+      <label class="mb-2">رمز عبور:</label>
+      <input class="form-control mb-4" type="password" name="pass" required>
+      <button class="form-control btn btn-danger" type="submit" >ریست کن!</button>
     </form>
   </body>
 </html>

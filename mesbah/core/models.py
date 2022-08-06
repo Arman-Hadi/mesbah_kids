@@ -44,7 +44,7 @@ class Kid(models.Model):
     gate_in = models.CharField(max_length=2, choices=GATEs, blank=True, default='NO')
     gate_out = models.CharField(max_length=2, choices=GATEs, blank=True, default='NO')
 
-    number = models.CharField(max_length=5, blank=True, default='000')
+    number = models.CharField(max_length=50, blank=True, default='000')
     status = models.CharField(max_length=2, choices=STATUSs, blank=True, default='NO')
 
     last_change = models.DateTimeField(null=True, default=None, blank=True)
