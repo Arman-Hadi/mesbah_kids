@@ -195,8 +195,11 @@
             PersonalCard.querySelector(".card-title").textContent = req.number;
             PersonalCard.querySelector(".card-text").textContent = req.first_name + ' ' + req.last_name;
             const datetime = new Date(req.last_change);
-            PersonalCard.querySelector(".card-footer").textContent = datetime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false});
-
+            const now = new Date();
+            var delta = now - datetime;
+            var minutes = Math.floor(delta / 60000);
+            // PersonalCard.querySelector(".card-footer").textContent = datetime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false});
+            PersonalCard.querySelector(".card-footer").textContent = `${minutes} دقیقه پیش`;
             if (req.status === "RE") {
               req.gate_out === "FE"
                 ? PersonalCard.classList.add("text-bg-success")
