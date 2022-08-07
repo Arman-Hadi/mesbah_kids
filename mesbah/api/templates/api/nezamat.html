@@ -40,6 +40,8 @@
       }
       .mytab {
         font-size: 0.95rem;
+        padding-left: 6px;
+        padding-right: 6px;
       }
     </style>
   </head>
@@ -82,6 +84,7 @@
           <h1 class="card-title"></h1>
           <p class="card-text"></p>
         </div>
+        <div class="card-footer py-1" style="font-size: 0.9rem;"></div>
       </div>
     </template>
 
@@ -191,6 +194,8 @@
             PersonalCard.querySelector(".card-header").textContent = req.gate_out === "FE" ? "مادر" : "پدر";
             PersonalCard.querySelector(".card-title").textContent = req.number;
             PersonalCard.querySelector(".card-text").textContent = req.first_name + ' ' + req.last_name;
+            const datetime = new Date(req.last_change);
+            PersonalCard.querySelector(".card-footer").textContent = datetime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false});
 
             if (req.status === "RE") {
               req.gate_out === "FE"
