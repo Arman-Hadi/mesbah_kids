@@ -6,7 +6,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>نظامت</title>
+    {% if gender == 'MA' %}
+      <title>نظامت پسران</title>
+    {% elif gender == 'FE' %}
+      <title>نظامت دختران</title>
+    {% endif %}
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -43,8 +47,12 @@
   </head>
   <body class="py-4 container-sm px-0">
     <div class="d-flex mb-2 px-3">
-      <a class="flex-sm-fill fs-6 pt-1" style="max-width: 3rem;" href="https://mesbahkids.ir/api/">خانه</a>
-        <h3 class="text-center flex-fill">نظامت</h3>
+      <a class="flex-sm-fill fs-6 pt-1" style="max-width: 3rem;" href="https://bracketacademy.ir/api/api/">خانه</a>
+      {% if gender == 'MA' %}
+        <h3 class="text-center flex-fill">نظامت پسران</h3>
+      {% elif gender == 'FE' %}
+        <h3 class="text-center flex-fill">نظامت دختران</h3>
+      {% endif %}
     </div>
     <ul class="nav nav-tabs px-0" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
@@ -157,6 +165,7 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     api = '{{ site }}'
+    gender = '{{ gender }}'
   
     const card = document
       .getElementById("card-template")
@@ -170,7 +179,7 @@
     UpdatingUI();
     setInterval(UpdatingUI, 1000);
     function UpdatingUI() {
-      axios.get(api + "/api/kids?" + "exclude=IN&exclude=NO").then((res) => {
+      axios.get(api + "/api/kids?gender=" + gender + "&exclude=IN&exclude=NO").then((res) => {
         const results = [...res.data];
         if (JSON.stringify(deliverRequests) !== JSON.stringify(results)) {
           deliverRequests = results;
