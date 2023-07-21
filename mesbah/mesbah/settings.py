@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+CSRF_TRUSTED_ORIGINS = ['https://*.mesbahkids.ir', 'http://*.mesbahkids.ir', 'http://mesbahkids.ir', 'http://mesbahkids.ir']
 
 # Application definition
 
