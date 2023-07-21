@@ -1,7 +1,6 @@
 db.sqlite3
 passenger_wsgi.py
 public/
-static/
 stderr.log
 tmp
 mesbah/local_settings.py
