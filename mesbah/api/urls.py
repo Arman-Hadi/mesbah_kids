@@ -14,6 +14,7 @@ urlpatterns = [
     #path('nezamat/<slug:gender>', views.NezamatView.as_view(), name='nezamat'),
     path('nezamat', views.NezamatView.as_view(), name='nezamat'),
     path('newkid', views.NewKidView.as_view(), name='newkid'),
+    path('numbers', views.NumbersView.as_view(), name='numbers'),
 
     path('reset', views.ResetView.as_view(), name='reset'),
 

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.http.response import HttpResponseNotFound
 from django.conf import settings
+from django.db.models import Q
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -14,6 +15,12 @@ from core.models import Kid
 
 def home(request):
     return render(request, 'api/index.html')
+
+
+class NumbersView(View):
+    def get(self, request):
+        kids = Kid.objects.filter(~Q(status='NO'))
+        return render(request, 'api/numbers.html', context={'kids': kids})
 
 
 class KidsView(generics.ListAPIView):
