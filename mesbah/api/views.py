@@ -19,7 +19,7 @@ def home(request):
 
 class NumbersView(View):
     def get(self, request):
-        kids = Kid.objects.filter(~Q(status='NO'))
+        kids = Kid.objects.filter(~Q(status='NO')).order_by('number')
         return render(request, 'api/numbers.html', context={'kids': kids})
 
 
