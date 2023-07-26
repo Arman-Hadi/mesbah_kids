@@ -36,9 +36,9 @@
         <p class="text-center">{{ kids|length }} کودک</p>
         {% for i in range1 %}
         {% if i in nums %}
-        <a class="btn btn-secondary my-2" href="#" role="button">{{ i }}</a>
-        {% else %}
         <a class="btn btn-primary my-2" href="#" role="button">{{ i }}</a>
+        {% else %}
+        <a class="btn btn-secondary my-2" href="#" role="button">{{ i }}</a>
         {% endif %}
         {% if i|divisibleby:10 %}
         <hr>
@@ -47,9 +47,9 @@
 
         {% for i in range2 %}
         {% if i in nums %}
-        <a class="btn btn-secondary my-2" href="#" role="button">{{ i }}</a>
-        {% else %}
         <a class="btn btn-primary my-2" href="#" role="button">{{ i }}</a>
+        {% else %}
+        <a class="btn btn-secondary my-2" href="#" role="button">{{ i }}</a>
         {% endif %}
         {% if i|divisibleby:10 %}
         <hr>
