@@ -40,7 +40,7 @@
         {% else %}
         <a class="btn btn-primary my-2" href="#" role="button">{{ i }}</a>
         {% endif %}
-        {% if k.number|divisibleby:10 %}
+        {% if i|divisibleby:10 %}
         <hr>
         {% endif %}
         {% endfor %}
@@ -51,7 +51,7 @@
         {% else %}
         <a class="btn btn-primary my-2" href="#" role="button">{{ i }}</a>
         {% endif %}
-        {% if k.number|divisibleby:10 %}
+        {% if i|divisibleby:10 %}
         <hr>
         {% endif %}
         {% endfor %}
