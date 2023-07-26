@@ -20,7 +20,17 @@ def home(request):
 class NumbersView(View):
     def get(self, request):
         kids = Kid.objects.filter(Q(status='IN') | Q(status='SE')).order_by('number')
-        return render(request, 'api/numbers.html', context={'kids': kids})
+        kid_nums = [i.number for i in kids]
+        return render(
+            request,
+            'api/numbers.html',
+            context={
+                'kids': kids,
+                'range1': range(101, 171),
+                'range2': range(201, 271),
+                'nums': kid_nums
+            }
+        )
 
 
 class KidsView(generics.ListAPIView):

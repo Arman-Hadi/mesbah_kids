@@ -34,8 +34,23 @@
     <div class="container-sm p-3">
         <a class="flex-sm-fill fs-6 pt-1" style="max-width: 3rem;" href="https://mesbahkids.ir/api/">خانه</a>
         <p class="text-center">{{ kids|length }} کودک</p>
-        {% for k in kids %}
-        <a class="btn btn-primary my-2" href="#" role="button">{{ k.number }}</a>
+        {% for i in range1 %}
+        {% if i in nums %}
+        <a class="btn btn-secondary my-2" href="#" role="button">{{ i }}</a>
+        {% else %}
+        <a class="btn btn-primary my-2" href="#" role="button">{{ i }}</a>
+        {% endif %}
+        {% if k.number|divisibleby:10 %}
+        <hr>
+        {% endif %}
+        {% endfor %}
+
+        {% for i in range2 %}
+        {% if i in nums %}
+        <a class="btn btn-secondary my-2" href="#" role="button">{{ i }}</a>
+        {% else %}
+        <a class="btn btn-primary my-2" href="#" role="button">{{ i }}</a>
+        {% endif %}
         {% if k.number|divisibleby:10 %}
         <hr>
         {% endif %}
