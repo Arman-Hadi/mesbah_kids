@@ -36,6 +36,9 @@
         <p class="text-center">{{ kids|length }} کودک</p>
         {% for k in kids %}
         <a class="btn btn-primary my-2" href="#" role="button">{{ k.number }}</a>
+        {% if k.number|divisibleby:10 %}
+        <hr>
+        {% endif %}
         {% endfor %}
     </div>
   </body>
