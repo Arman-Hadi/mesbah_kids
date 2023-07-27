@@ -26,7 +26,7 @@ class NumbersView(View):
             'api/numbers.html',
             context={
                 'kids': kids,
-                'range1': [str(i) for i in range(101, 171)],
+                'range1': [str(i) for i in range(101, 181)],
                 'range2': [str(i) for i in range(201, 271)],
                 'nums': kid_nums
             }
