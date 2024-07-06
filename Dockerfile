@@ -13,3 +13,4 @@ WORKDIR /mesbah
 COPY ./mesbah /mesbah
 
 RUN mkdir -p /var/www/mesbah/static
+RUN mkdir -p /var/www/mesbah/media
