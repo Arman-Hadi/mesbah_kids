@@ -206,7 +206,7 @@ class ChangeStatusView(APIView):
             k.save()
 
             data = {
-                "kid": k[0],
+                "kid": k,
                 "previous_status": previous_status,
                 "status": status
             }
