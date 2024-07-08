@@ -17,4 +17,5 @@ class KidAdmin(admin.ModelAdmin):
 class StatusChangeAdmin(admin.ModelAdmin):
     ordering = ['-created_at']
     list_display = ['kid', 'user', 'previous_status', 'status', 'created_at']
+    list_filter = ['user', 'previous_status', 'status']
     search_fields = ['kid', 'user']
