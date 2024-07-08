@@ -7,11 +7,8 @@ from . import views
 app_name = 'api'
 
 protected_urls = [
-    ('kids', views.KidsView.as_view(), 'kids'),
     ('send/<slug:gender>', views.SendKidView.as_view(), 'send'),
     ('deliver/<slug:gender>', views.DeliverKidView.as_view(), 'deliver'),
-    ('nezamat', views.NezamatView.as_view(), 'nezamat'),
-    ('numbers', views.NumbersView.as_view(), 'numbers'),
     ('reset', views.ResetView.as_view(), 'reset')
 ]
 
@@ -21,15 +18,17 @@ urlpatterns = [
 ]
 
 urlpatterns += [
+    path('logout', views.logout_view, name='logout'),
+    path('status', views.ChangeStatusView.as_view(), name='status'),
     path('kids', views.KidsView.as_view(), name='kids'),
     path('father', views.FatherRequestView.as_view(), name='father'),
     path('mother', views.MotherRequestView.as_view(), name='mother'),
     # path('send/<slug:gender>', views.SendKidView.as_view(), name='send'),
     # path('deliver/<slug:gender>', views.DeliverKidView.as_view(), name='deliver'),
-    #path('nezamat/<slug:gender>', views.NezamatView.as_view(), name='nezamat'),
-    # path('nezamat', views.NezamatView.as_view(), name='nezamat'),
+    # path('nezamat/<slug:gender>', views.NezamatView.as_view(), name='nezamat'),
+    path('nezamat', views.NezamatView.as_view(), name='nezamat'),
     path('newkid', views.NewKidView.as_view(), name='newkid'),
-    # path('numbers', views.NumbersView.as_view(), name='numbers'),
+    path('numbers', views.NumbersView.as_view(), name='numbers'),
 
     # path('reset', views.ResetView.as_view(), name='reset'),
 

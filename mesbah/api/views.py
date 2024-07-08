@@ -3,11 +3,14 @@ from django.views import View
 from django.http.response import HttpResponseNotFound
 from django.conf import settings
 from django.db.models import Q
+from django.utils import timezone
+from django.contrib.auth import logout
 
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAdminUser
 
 from .serializers import KidSerializer
 from core.models import Kid
@@ -182,3 +185,28 @@ class ResetView(View):
             return redirect('https://google.com')
         else:
             return redirect('api:reset')
+
+
+class ChangeStatusView(APIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAdminUser,)
+
+    def post(self, request):
+        try:
+            id = int(request.data.get('id', None))
+            status = request.data.get('status', None)
+
+            if not id or not status:
+                return Response(data={'success': False, 'error': 'no id or status'}, status=400)
+
+            Kid.objects.filter(id=id).update(status=status, last_change=timezone.now())
+
+            return Response(data={'success': True,}, status=200)
+        except Exception as e:
+            return Response(data={'success': False, 'error': str(e)}, status=400)
+
+
+def logout_view(request):
+    next = request.GET.get('next', 'api:nezamat')
+    logout(request)
+    return redirect(next);
