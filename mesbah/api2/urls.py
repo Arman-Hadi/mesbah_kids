@@ -9,7 +9,7 @@ urlpatterns = [
     path('kids', views.KidsView.as_view(), name='kids'),
     path('status', views.ChangeStatusView.as_view(), name='status'),
     path('undo', views.UndoStatusView.as_view(), name='undo'),
-    
+
     path('<slug:kids>-entry', views.KidsEntryView.as_view(), name='kids-entry'),
 
     path('<slug:parent>-delivery', views.ParentDeliveryView.as_view(), name='parent-delivery'),
