@@ -210,7 +210,7 @@ class ChangeStatusView(APIView):
                 "previous_status": previous_status,
                 "status": status
             }
-            if not request.user.is_anonymous(): data['user'] = request.user
+            if not request.user.is_anonymous: data['user'] = request.user
 
             StatusChange.objects.create(**data)
 
