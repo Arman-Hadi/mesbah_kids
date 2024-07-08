@@ -4,6 +4,8 @@ public/
 stderr.log
 tmp
 mesbah/local_settings.py
+.DS_Store
+mesbah.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
