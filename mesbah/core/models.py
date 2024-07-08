@@ -1,7 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
-
-from datetime import date
+from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 
 class Kid(models.Model):
@@ -51,3 +50,14 @@ class Kid(models.Model):
 
     def __str__(self):
         return f'{self.number}. {self.first_name} {self.last_name}'
+
+
+class StatusChange(models.Model):
+    kid = models.ForeignKey(Kid, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE,
+        null=True, blank=True
+    )
+    created_at = models.DateTimeField(default=timezone.now)
+    previous_status = models.CharField(blank=True, default="", max_length=10)
+    status = models.CharField(blank=True, default="", max_length=10)

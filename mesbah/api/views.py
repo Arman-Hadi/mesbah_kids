@@ -13,7 +13,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 
 from .serializers import KidSerializer
-from core.models import Kid
+from core.models import Kid, StatusChange
 
 
 def home(request):
@@ -199,7 +199,20 @@ class ChangeStatusView(APIView):
             if not id or not status:
                 return Response(data={'success': False, 'error': 'no id or status'}, status=400)
 
-            Kid.objects.filter(id=id).update(status=status, last_change=timezone.now())
+            k = Kid.objects.get(id=id)
+            previous_status = k.status
+            k.status = status
+            k.last_change = timezone.now()
+            k.save()
+
+            data = {
+                "kid": k[0],
+                "previous_status": previous_status,
+                "status": status
+            }
+            if not request.user.is_anonymous(): data['user'] = request.user
+
+            StatusChange.objects.create(**data)
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:
