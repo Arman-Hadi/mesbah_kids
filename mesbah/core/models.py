@@ -31,6 +31,7 @@ class Kid(models.Model):
     first_name = models.CharField(max_length=100, blank=True, default='ندارد')
     last_name = models.CharField(max_length=100, blank=True, default='ندارد')
     birth_date = models.CharField(max_length=12, default='1396/01/01', blank=True)
+    age = models.PositiveIntegerField(null=True, blank=True)
     gender = models.CharField(max_length=2, choices=GENDERs, blank=True, default='NO')
     wc = models.BooleanField(default=True, blank=True)
 
@@ -50,6 +51,20 @@ class Kid(models.Model):
 
     def __str__(self):
         return f'{self.number}. {self.first_name} {self.last_name}'
+
+    def calculate_age(self):
+        try:
+            y = int(self.birth_date[0:4])
+        except:
+            return
+
+        if y < 1500:
+            self.age = 1403 - y
+        else:
+            self.age = timezone.now().year - y
+        if self.age < 0:
+            return
+        self.save()
 
 
 class StatusChange(models.Model):
