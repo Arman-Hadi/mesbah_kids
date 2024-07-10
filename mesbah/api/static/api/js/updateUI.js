@@ -145,7 +145,8 @@ function UpdatingUI() {
             // Filter by search
             filterCards("search_input", document.getElementsByClassName("card"))
 
-            window.navigator.vibrate([200])
+            // window.navigator.vibrate([200])
+            navigator.vibrate([200])
         }
     });
 }
