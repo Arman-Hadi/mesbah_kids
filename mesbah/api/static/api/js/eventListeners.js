@@ -6,14 +6,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchInputs = document.querySelectorAll('.search-input');
     searchInputs.forEach(input => {
         input.addEventListener('keyup', function () {
-            filterCards("search_input", "card");
+            const cards = document.getElementsByClassName("card")
+            filterCards("search_input", cards);
         });
     });
 
     const clearButtons = document.querySelectorAll('.clear-btn');
     clearButtons.forEach(button => {
         button.addEventListener('click', function () {
-            clearSearch("search_input", "card");
+            const cards = document.getElementsByClassName("card")
+            clearSearch("search_input", cards);
         });
     });
 });
