@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.utils import timezone
 
 from .models import Kid, StatusChange
 
@@ -25,5 +24,5 @@ class KidAdmin(admin.ModelAdmin):
 class StatusChangeAdmin(admin.ModelAdmin):
     ordering = ['-created_at']
     list_display = ['kid', 'user', 'previous_status', 'status', 'created_at']
-    list_filter = ['user', 'previous_status', 'status']
+    list_filter = ['user', 'previous_status', 'status', 'created_at']
     search_fields = ['kid', 'user']

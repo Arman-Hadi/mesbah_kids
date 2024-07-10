@@ -1,3 +1,4 @@
+from typing import Iterable
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
@@ -49,22 +50,30 @@ class Kid(models.Model):
 
     last_change = models.DateTimeField(null=True, default=None, blank=True)
 
+    def save(self, *args, **kwargs):
+        self.age = self.calculate_age(nosave=True)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f'{self.number}. {self.first_name} {self.last_name}'
 
-    def calculate_age(self):
+    def calculate_age(self, nosave=False):
         try:
             y = int(self.birth_date[0:4])
         except:
-            return
+            return None
 
         if y < 1500:
-            self.age = 1403 - y
+            age = 1403 - y
         else:
-            self.age = timezone.now().year - y
-        if self.age < 0:
-            return
-        self.save()
+            age = timezone.now().year - y
+        if age < 0:
+            return None
+
+        if not nosave:
+            self.age = age
+            self.save()
+        return age
 
 
 class StatusChange(models.Model):
