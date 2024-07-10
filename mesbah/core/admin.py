@@ -8,11 +8,14 @@ from .models import Kid, StatusChange
 class KidAdmin(admin.ModelAdmin):
     ordering = ['status', 'gender', 'gate_in', 'gate_out',
         'first_name', 'last_name', '-number',]
-    list_display = ['first_name', 'last_name', 'gender',
+    list_display = ['name', 'age',
         'caretaker', 'status', 'number']
     list_filter = ['gender', 'gate_in', 'gate_out', 'status',]
     search_fields = ['first_name', 'last_name', 'caretaker_name', 'number']
     actions = ['calculate_age',]
+
+    def name(self, obj):
+        return "%s %s" % (obj.first_name, obj.last_name)
 
     @admin.action(description="Calculate Age")
     def calculate_age(modeladmin, request, queryset):
