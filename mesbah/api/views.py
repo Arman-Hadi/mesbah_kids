@@ -22,7 +22,7 @@ def home(request):
 
 class NumbersView(View):
     def get(self, request):
-        kids = Kid.objects.filter(Q(status='IN') | Q(status='SE') | Q(status='DE')).order_by('number').values_list('number', 'status')
+        kids = Kid.objects.filter(Q(status='IN') | Q(status="RE") | Q(status='SE') | Q(status='DE')).order_by('number').values_list('number', 'status')
         all_sum = kids.count()
         last_kid = int(kids.last()[0])
         kids = dict(kids)
@@ -41,6 +41,7 @@ class NumbersView(View):
                 numbers_list.append(inner_list)
                 inner_list = []
         numbers_list.append(inner_list)
+        print(numbers_list)
 
         return render(
             request,
