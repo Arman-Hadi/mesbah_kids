@@ -40,7 +40,7 @@
         </div>
         {% for i in nums %}
           {% for  number, status in i %}
-            {% if status == 'IN' %}
+            {% if status == 'IN' or status == 'RE' %}
             <a class="btn btn-primary my-2" href="#" role="button">{{ number }}</a>
             {% elif status == 'SE' %}
             <a class="btn btn-primary my-2 text-dark" href="#" role="button">{{ number }}</a>
