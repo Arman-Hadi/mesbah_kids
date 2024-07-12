@@ -34,14 +34,16 @@
     <div class="container-sm p-3">
         <a class="flex-sm-fill fs-6 pt-1" style="max-width: 3rem;" href="https://mesbahkids.ir/api/">خانه</a>
         <div class="d-flex justify-content-center">
-          <p class="mx-3 p-1">کل کودکان: {{ kids|length }}</p>
-          <p class="mx-3 bg-primary p-1">کودکان داخل: {{ in_sum }}</p>
-          <p class="mx-3 bg-warning p-1">کودکان تحویل‌داده شده: {{ delivered_sum }}</p>
+          <p class="mx-3 p-2">کل کودکان: {{ kids|length }}</p>
+          <p class="mx-3 bg-primary p-2 text-light rounded">کودکان داخل: {{ in_sum }}</p>
+          <p class="mx-3 bg-warning p-2 rounded">کودکان تحویل‌داده شده: {{ delivered_sum }}</p>
         </div>
         {% for i in nums %}
           {% for  number, status in i %}
             {% if status == 'IN' %}
             <a class="btn btn-primary my-2" href="#" role="button">{{ number }}</a>
+            {% if status == 'SE' %}
+            <a class="btn btn-primary my-2 text-dark" href="#" role="button">{{ number }}</a>
             {% elif status == 'DE' %}
             <a class="btn btn-warning my-2" href="#" role="button">{{ number }}</a>
             {% else %}
