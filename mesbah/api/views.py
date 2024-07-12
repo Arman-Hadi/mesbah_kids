@@ -22,16 +22,36 @@ def home(request):
 
 class NumbersView(View):
     def get(self, request):
-        kids = Kid.objects.filter(Q(status='IN') | Q(status='SE')).order_by('number')
-        kid_nums = [i.number for i in kids]
+        kids = Kid.objects.filter(Q(status='IN') | Q(status='SE') | Q(status='DE')).order_by('number').values_list('number', 'status')
+        last_kid = int(kids.last()[0])
+        kids = dict(kids)
+        in_sum = Kid.objects.filter(Q(status='IN') | Q(status='SE')).count()
+        delivered_sum = Kid.objects.filter(status="DE").count()
+        numbers_list = []
+        inner_list = []
+        for number in range(101, last_kid+1):
+            try:
+                status = kids[str(number)]
+            except:
+                status = 'NO'
+            inner_list.append((number, status))
+
+            if number % 10 == 0:
+                numbers_list.append(inner_list)
+                inner_list = []
+        numbers_list.append(inner_list)
+
         return render(
             request,
             'api/numbers.html',
             context={
                 'kids': kids,
-                'range1': [str(i) for i in range(101, 181)],
-                'range2': [str(i) for i in range(201, 271)],
-                'nums': kid_nums
+                'in_sum': in_sum,
+                'delivered_sum': delivered_sum,
+                'range1': [str(i) for i in range(101, 200)],
+                'range2': [str(i) for i in range(201, 300)],
+                'range3': [str(i) for i in range(201, 300)],
+                'nums': numbers_list
             }
         )
 

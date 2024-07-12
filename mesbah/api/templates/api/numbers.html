@@ -33,28 +33,23 @@
   <body>
     <div class="container-sm p-3">
         <a class="flex-sm-fill fs-6 pt-1" style="max-width: 3rem;" href="https://mesbahkids.ir/api/">خانه</a>
-        <p class="text-center">{{ kids|length }} کودک</p>
-        {% for i in range1 %}
-        {% if i in nums %}
-        <a class="btn btn-primary my-2" href="#" role="button">{{ i }}</a>
-        {% else %}
-        <a class="btn btn-secondary my-2" href="#" role="button">{{ i }}</a>
-        {% endif %}
-        {% if i|divisibleby:10 %}
-        <hr>
-        {% endif %}
-        {% endfor %}
-
-        {% for i in range2 %}
-        {% if i in nums %}
-        <a class="btn btn-primary my-2" href="#" role="button">{{ i }}</a>
-        {% else %}
-        <a class="btn btn-secondary my-2" href="#" role="button">{{ i }}</a>
-        {% endif %}
-        {% if i|divisibleby:10 %}
-        <hr>
-        {% endif %}
-        {% endfor %}
+        <div class="d-flex justify-content-center">
+          <p class="mx-3 p-1">کل کودکان: {{ kids|length }}</p>
+          <p class="mx-3 bg-primary p-1">کودکان داخل: {{ in_sum }}</p>
+          <p class="mx-3 bg-warning p-1">کودکان تحویل‌داده شده: {{ delivered_sum }}</p>
+        </div>
+        {% for i in nums %}
+          {% for  number, status in i %}
+            {% if status == 'IN' %}
+            <a class="btn btn-primary my-2" href="#" role="button">{{ number }}</a>
+            {% elif status == 'DE' %}
+            <a class="btn btn-warning my-2" href="#" role="button">{{ number }}</a>
+            {% else %}
+            <a class="btn btn-secondary my-2" href="#" role="button">{{ number }}</a>
+            {% endif %}
+          {% endfor %}
+          <hr/>
+        {% endfor %}  
     </div>
   </body>
 </html>
