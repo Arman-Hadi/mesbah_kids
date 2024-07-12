@@ -23,6 +23,7 @@ def home(request):
 class NumbersView(View):
     def get(self, request):
         kids = Kid.objects.filter(Q(status='IN') | Q(status='SE') | Q(status='DE')).order_by('number').values_list('number', 'status')
+        all_sum = kids.count()
         last_kid = int(kids.last()[0])
         kids = dict(kids)
         in_sum = Kid.objects.filter(Q(status='IN') | Q(status='SE')).count()
@@ -45,7 +46,7 @@ class NumbersView(View):
             request,
             'api/numbers.html',
             context={
-                'kids': kids,
+                'all_sum': all_sum,
                 'in_sum': in_sum,
                 'delivered_sum': delivered_sum,
                 'range1': [str(i) for i in range(101, 200)],
