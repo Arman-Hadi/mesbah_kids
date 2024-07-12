@@ -26,7 +26,7 @@ class NumbersView(View):
         all_sum = kids.count()
         last_kid = int(kids.last()[0])
         kids = dict(kids)
-        in_sum = Kid.objects.filter(Q(status='IN') | Q(status='SE')).count()
+        in_sum = Kid.objects.filter(Q(status='IN') | Q(status="RE") | Q(status='SE')).count()
         delivered_sum = Kid.objects.filter(status="DE").count()
         numbers_list = []
         inner_list = []
