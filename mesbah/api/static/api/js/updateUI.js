@@ -107,6 +107,8 @@ function UpdatingUI() {
                     });
 
                     deliverRequestsContainer.appendChild(PersonalCard);
+
+                    navigator.vibrate([200])
                 } else if (req.status == 'SE') {
                     req.gate_out === "FE"
                         ? PersonalCard.classList.add("text-bg-warning")
@@ -130,6 +132,8 @@ function UpdatingUI() {
                     });
 
                     sentContainer.appendChild(PersonalCard);
+
+                    navigator.vibrate([200, 100, 200])
                 } else if (req.status == 'DE') {
                     req.gate_out === "FE"
                         ? PersonalCard.classList.add("text-bg-dark")
@@ -144,9 +148,6 @@ function UpdatingUI() {
 
             // Filter by search
             filterCards("search_input", document.getElementsByClassName("card"))
-
-            // window.navigator.vibrate([200])
-            navigator.vibrate([100])
         }
     });
 }
