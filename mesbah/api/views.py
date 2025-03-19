@@ -68,11 +68,12 @@ class KidsView(generics.ListAPIView):
         exclude = self.request.GET.getlist('exclude', None)
 
         qs = Kid.objects.all()
-        if gender: qs = qs.filter(gender=gender)
         if status: qs = qs.filter(status=status)
         if exclude:
             for i in exclude:
                 qs = qs.exclude(status=i)
+        if gender: qs = qs.filter(gender=gender)
+        print(qs)
 
         return qs
 
@@ -96,7 +97,7 @@ class NewKidView(View):
         return redirect('api:newkid')
 
 
-class NezamatView(View):
+class NezamatGenderView(View):
     def get(self, request, gender):
         if not (gender == 'MA' or gender == 'FE'):
             return HttpResponseNotFound()
@@ -109,7 +110,7 @@ class NezamatView(View):
         else:
             site = settings.API
 
-        return render(request, 'api/nezamat.html', context={'site': site, 'gender': gender})
+        return render(request, 'api/nezamatـgender.html', context={'site': site, 'gender': gender})
 
 
 class NezamatView(View):
