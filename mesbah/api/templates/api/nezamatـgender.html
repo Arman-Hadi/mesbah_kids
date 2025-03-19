@@ -224,8 +224,10 @@
   {% load static %}
   <script type="module" src="{% static 'api/js/eventListeners.js' %}"></script>
   {% if gender == 'MA' %}
+  {% load static %}
   <script type="module" src="{% static 'api/js/updateUI_male.js' %}"></script>
   {% elif gender == 'FE' %}
+  {% load static %}
   <script type="module" src="{% static 'api/js/updateUI_female.js' %}"></script>
   {% endif %}
 </html>
