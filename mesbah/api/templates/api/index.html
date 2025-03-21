@@ -29,46 +29,44 @@
         justify-content: center;
         height: 100vh;
       }
-      .form-container {
-        width: 90%;
-        max-width: 40rem;
-        padding: 2rem;
-        box-shadow: 0 8px 15px 5px rgba(0, 0, 0, 6%);
-        border-radius: 5px;
-      }
     </style>
   </head>
   <body>
-    <div class="container-sm">
+    <div class="container-sm" style="max-width: 700px;">
         <div class="row mb-4">
-            <h1>غرفه جوانه‌ها</h1>
+            <h1 class="text-center">غرفه جوانه‌ها</h1>
             <!-- <img src="{% static 'api/images/logo.c9a324ea88b6430dd7ce.png' %}" alt="logo" style="filter: invert(1); margin: auto; max-width: 10rem;" width="100%"> -->
         </div>
-        <div class="row mb-4">
-            <a href="https://javaaneha.ir/" class="col btn btn-success align-middle fs-2 m-2" style="height: 5rem;">
+        <div class="row mb-2">
+            <a href="https://javaaneha.ir/" class="col btn btn-success align-middle fs-2 m-2 pt-3" style="height: 5rem;">
                 صفحه پذیرش
             </a>
         </div>
         <div class="row">
-            <a href="{% url 'api:nezamat' %}" class="col btn btn-primary align-middle fs-2 m-2" style="height: 5rem;">
+            <a href="{% url 'api:nezamat' %}" class="col btn btn-primary align-middle fs-2 mt-1 mx-2 pt-3" style="height: 5rem;">
                 نظامت
             </a>
         </div>
         <div class="row">
-            <a href="{% url 'api:nezamat-gender' gender='FE' %}" class="col btn btn-primary align-middle fs-2 m-2" style="height: 5rem;">
+            <a href="{% url 'api:nezamat-gender' gender='FE' %}" class="col btn btn-primary align-middle fs-2 mt-1 mx-2 pt-3" style="height: 5rem;">
                 نظامت دختران
             </a>
         </div>
-        <div class="row">
-            <a href="{% url 'api:nezamat-gender' gender='MA' %}" class="col btn btn-primary align-middle fs-2 m-2" style="height: 5rem;">
+        <div class="row mb-2">
+            <a href="{% url 'api:nezamat-gender' gender='MA' %}" class="col btn btn-primary align-middle fs-2 mt-1 mx-2 pt-3" style="height: 5rem;">
                 نظامت پسران
             </a>
         </div>
-        <div class="row">
-          <a href="{% url 'api:numbers' %}" class="col btn btn-secondary align-middle fs-2 m-2" style="height: 5rem;">
+        <div class="row mb-2">
+          <a href="{% url 'api:numbers' %}" class="col btn btn-secondary align-middle fs-2 mt-1 mx-2 pt-3" style="height: 5rem;">
               شماره‌های مصرف شده
           </a>
-      </div>
+        </div>
+        <div class="row">
+          <a href="{% url 'api:reset' %}" class="col btn btn-danger align-middle fs-2 mt-1 mx-2 pt-3" style="height: 5rem;">
+              ریست
+          </a>
+        </div>
     </div>
   </body>
 </html>
