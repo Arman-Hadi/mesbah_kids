@@ -9,7 +9,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from django.utils import timezone
 
 from .serializers import KidSerializer, AuthTokenSerializer
-from core.models import Kid
+from core.models import Kid, StatusChange
 
 from datetime import date
 import requests
@@ -73,14 +73,25 @@ class KidsEntryView(APIView):
         try:
             id = int(request.data.get('id', None))
             number = request.data.get('number', None)
-            gender = request.data.get('gender', 'NO')
+            # gender = request.data.get('gender', 'NO')
 
             if not id or number == '000' or not number:
                 return Response(data={'success': False, 'error': 'no id or number'}, status=400)
-            if not(gender == 'FE' or gender == 'MA'):
-                return Response(data={'success': False, 'error': 'no gender'}, status=400)
+            # if not(gender == 'FE' or gender == 'MA'):
+            #     return Response(data={'success': False, 'error': 'no gender'}, status=400)
 
-            Kid.objects.filter(id=id).update(gate_in=gate_in, number=number, gender=gender, status='IN', last_change=timezone.now())
+            Kid.objects.filter(id=id).update(
+                gate_in=gate_in, number=number, status='IN', last_change=timezone.now()
+            )
+
+            # Status Change
+            data = {
+                "kid_id": id,
+                "previous_status": 'NO',
+                "status": 'IN',
+                "user": request.user
+            }
+            StatusChange.objects.create(**data)
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:
@@ -106,7 +117,18 @@ class ParentDeliveryView(APIView):
             if not id:
                 return Response(data={'success': False, 'error': 'no id'}, status=400)
 
-            Kid.objects.filter(id=id).update(status='RE', gate_out=gate_out, last_change=timezone.now())
+            Kid.objects.filter(id=id).update(
+                status='RE', gate_out=gate_out, last_change=timezone.now()
+            )
+
+            # Status Change
+            data = {
+                "kid_id": id,
+                "previous_status": 'IN',
+                "status": 'RE',
+                "user": request.user
+            }
+            StatusChange.objects.create(**data)
 
             return Response(data={'success': True,}, status=200)
         except Exception as e:
@@ -177,7 +199,19 @@ class UndoStatusView(APIView):
             data['gate_out'] = 'NO'
 
         try:
-            Kid.objects.filter(id=id).update(**data)
+            k = Kid.objects.filter(id=id)
+            previous_status = k.values('status')[0]['status']
+            k.update(**data)
+
+            # Status Change
+            data = {
+                "kid_id": id,
+                "previous_status": previous_status,
+                "status": status,
+                "user": request.user
+            }
+            StatusChange.objects.create(**data)
+
             return Response(data={'success': True,}, status=200)
         except Exception as e:
             return Response(data={'success': False, 'error': str(e)}, status=400)
