@@ -1,19 +1,29 @@
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.settings import api_settings
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAdminUser
+from rest_framework.authtoken.views import ObtainAuthToken
 
 from django.utils import timezone
 
-from .serializers import KidSerializer
+from .serializers import KidSerializer, AuthTokenSerializer
 from core.models import Kid
 
-from datetime import date, datetime, timedelta
+from datetime import date
 import requests
+
+
+class AddKidView(generics.CreateAPIView):
+    serializer_class = KidSerializer
+    authentication_classes = ()
 
 
 class KidsView(generics.ListCreateAPIView):
     serializer_class = KidSerializer
-    authentication_classes = ()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAdminUser,)
 
     def get_queryset(self):
         gender = self.request.GET.get('gender', None)
@@ -29,6 +39,8 @@ class KidsView(generics.ListCreateAPIView):
 
 class ChangeStatusView(APIView):
     authentication_classes = ()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAdminUser,)
 
     def post(self, request):
         try:
@@ -47,6 +59,8 @@ class ChangeStatusView(APIView):
 
 class KidsEntryView(APIView):
     authentication_classes = ()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAdminUser,)
 
     def post(self, request, kids):
         if kids == 'boys':
@@ -75,6 +89,8 @@ class KidsEntryView(APIView):
 
 class ParentDeliveryView(APIView):
     authentication_classes = ()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAdminUser,)
 
     def post(self, request, parent):
         if parent == 'father':
@@ -139,6 +155,9 @@ class GetPorslineData(APIView):
 
 
 class UndoStatusView(APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAdminUser,)
+
     def post(self, request):
         id = int(request.data.get('id', None))
         status = request.data.get('status', None)
@@ -162,3 +181,9 @@ class UndoStatusView(APIView):
             return Response(data={'success': True,}, status=200)
         except Exception as e:
             return Response(data={'success': False, 'error': str(e)}, status=400)
+
+
+class CreateAuthToken(ObtainAuthToken):
+    """Create token for user"""
+    serializer_class = AuthTokenSerializer
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
