@@ -73,15 +73,15 @@ class KidsEntryView(APIView):
         try:
             id = int(request.data.get('id', None))
             number = request.data.get('number', None)
-            # gender = request.data.get('gender', 'NO')
+            gender = request.data.get('gender', 'NO')
 
             if not id or number == '000' or not number:
                 return Response(data={'success': False, 'error': 'no id or number'}, status=400)
-            # if not(gender == 'FE' or gender == 'MA'):
-            #     return Response(data={'success': False, 'error': 'no gender'}, status=400)
+            if not(gender == 'FE' or gender == 'MA'):
+                return Response(data={'success': False, 'error': 'no gender'}, status=400)
 
             Kid.objects.filter(id=id).update(
-                gate_in=gate_in, number=number, status='IN', last_change=timezone.now()
+                gate_in=gate_in, number=number, status='IN', gender=gender, last_change=timezone.now()
             )
 
             # Status Change
@@ -194,7 +194,6 @@ class UndoStatusView(APIView):
             data['gate_in'] = 'NO'
             data['gate_out'] = 'NO'
             data['number'] = '000'
-            data['gender'] = 'NO'
         elif status == 'IN':
             data['gate_out'] = 'NO'
 
