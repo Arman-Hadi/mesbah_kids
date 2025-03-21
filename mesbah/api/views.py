@@ -196,18 +196,30 @@ class ResetView(View):
         return render(request, 'api/reset.html', context={'resets': resets,})
 
     def post(self, request):
+        resets = {
+            'gender': 'جنسیت',
+            'number': 'شماره',
+        }
+        if not request.user.is_superuser:
+            message = 'برو بگو بزرگترت بیاد!'
+            return render(
+                request, 'api/reset.html',
+                context={'resets': resets, 'message': message}
+            )
+
         gender = 'NO' if request.POST.get('gender', None) else None
         number = '000' if request.POST.get('number', None) else None
-        password = request.POST.get('pass', '')
-        if password == 'sagggggg':
-            data = dict.fromkeys(['gate_in', 'gate_out', 'status',], 'NO')
-            if gender: data['gender'] = gender
-            if number: data['number'] = number
-            data['last_change'] = None
-            Kid.objects.all().update(**data)
-            return redirect('https://google.com')
-        else:
-            return redirect('api:reset')
+        data = dict.fromkeys(['gate_in', 'gate_out', 'status',], 'NO')
+        if gender: data['gender'] = gender
+        if number: data['number'] = number
+        data['last_change'] = None
+        Kid.objects.all().update(**data)
+
+        message = 'ریست شد!'
+        return render(
+            request, 'api/reset.html',
+            context={'resets': resets, 'message': message}
+        )
 
 
 class ChangeStatusView(APIView):
