@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = [
     'https://*.mesbahkids.ir', 'http://*.mesbahkids.ir', 'http://mesbahkids.ir', 'http://mesbahkids.ir',
     'https://javaaneha.ir', 'https://api.javaaneha.ir',
-    'https://*.bmna.ir', 'http://*.bmna.ir', 'http://bmna.ir', 'https://bmna.ir'
+    'https://*.bnma.ir', 'http://*.bnma.ir', 'http://bnma.ir', 'https://bnma.ir'
 ]
 
 # Application definition
