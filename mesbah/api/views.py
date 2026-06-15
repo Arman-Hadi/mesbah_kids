@@ -41,7 +41,6 @@ class NumbersView(View):
                 numbers_list.append(inner_list)
                 inner_list = []
         numbers_list.append(inner_list)
-        print(numbers_list)
 
         return render(
             request,
@@ -73,7 +72,6 @@ class KidsView(generics.ListAPIView):
             for i in exclude:
                 qs = qs.exclude(status=i)
         if gender: qs = qs.filter(gender=gender)
-        print(qs)
 
         return qs
 
