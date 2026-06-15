@@ -2,6 +2,8 @@ asgiref
 certifi
 charset-normalizer
 Django
+gunicorn
+psycopg2-binary
 django-cors-headers
 djangorestframework
 idna
