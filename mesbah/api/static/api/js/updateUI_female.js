@@ -60,7 +60,7 @@ const badge3 = document.getElementById("badge3")
 let deliverRequests = [];
 
 UpdatingUI();
-setInterval(UpdatingUI, 1000);
+setInterval(UpdatingUI, 5000);
 function UpdatingUI() {
     axios.get(api + "/api/kids?" + "exclude=IN&exclude=NO&gender=FE").then((res) => {
         const results = [...res.data];
