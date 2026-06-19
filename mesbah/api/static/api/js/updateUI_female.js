@@ -58,11 +58,17 @@ const badge2 = document.getElementById("badge2")
 const badge3 = document.getElementById("badge3")
 
 let deliverRequests = [];
+let kidsEtag = null;
 
 UpdatingUI();
-setInterval(UpdatingUI, 5000);
+setInterval(UpdatingUI, 3000);
 function UpdatingUI() {
-    axios.get(api + "/api/kids?" + "exclude=IN&exclude=NO&gender=FE").then((res) => {
+    axios.get(api + "/api/kids?" + "exclude=IN&exclude=NO&gender=FE", {
+        headers: kidsEtag ? { 'If-None-Match': kidsEtag } : {},
+        validateStatus: (status) => (status >= 200 && status < 300) || status === 304,
+    }).then((res) => {
+        if (res.status === 304) return;
+        if (res.headers.etag) kidsEtag = res.headers.etag;
         const results = [...res.data];
         if (JSON.stringify(deliverRequests) !== JSON.stringify(results)) {
             deliverRequests = results;

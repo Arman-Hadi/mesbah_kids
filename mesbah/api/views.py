@@ -14,6 +14,7 @@ from rest_framework.permissions import IsAdminUser
 
 from .serializers import KidSerializer
 from core.models import Kid, StatusChange
+from core.etag import compute_kids_etag, normalize_etag
 
 
 def home(request):
@@ -74,6 +75,18 @@ class KidsView(generics.ListAPIView):
         if gender: qs = qs.filter(gender=gender)
 
         return qs
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        etag = compute_kids_etag(queryset)
+
+        if normalize_etag(request.META.get('HTTP_IF_NONE_MATCH')) == etag:
+            return Response(status=304)
+
+        serializer = self.get_serializer(queryset, many=True)
+        response = Response(serializer.data)
+        response['ETag'] = etag
+        return response
 
 
 class NewKidView(View):

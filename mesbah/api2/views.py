@@ -10,6 +10,7 @@ from django.utils import timezone
 
 from .serializers import KidSerializer, AuthTokenSerializer
 from core.models import Kid, StatusChange
+from core.etag import compute_kids_etag, normalize_etag
 
 from datetime import date
 import requests
@@ -35,6 +36,18 @@ class KidsView(generics.ListCreateAPIView):
         qs = qs.order_by('-last_change')
 
         return qs
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        etag = compute_kids_etag(queryset)
+
+        if normalize_etag(request.META.get('HTTP_IF_NONE_MATCH')) == etag:
+            return Response(status=304)
+
+        serializer = self.get_serializer(queryset, many=True)
+        response = Response(serializer.data)
+        response['ETag'] = etag
+        return response
 
 
 class ChangeStatusView(APIView):
